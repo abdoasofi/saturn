@@ -80,7 +80,9 @@ function render_page_layout(page, company_info) {
                         <h2 id="item-name-title"></h2>
                         <dl class="row">
                             <dt class="col-sm-4">${__("Item Code")}</dt><dd class="col-sm-8" id="item-code"></dd>
-                            <dt class="col-sm-4">${__("Item Group")}</dt><dd class="col-sm-8" id="item-group"></dd>
+                            <dt class="col-sm-4">${__("Saturn Code")}</dt><dd class="col-sm-8" id="item-saturn-code"></dd>
+							<dt class="col-sm-4">${__("SKU")}</dt><dd class="col-sm-8" id="item-sku"></dd>
+							<dt class="col-sm-4">${__("Item Group")}</dt><dd class="col-sm-8" id="item-group"></dd>
                             <dt class="col-sm-4">${__("Standard Selling Price")}</dt><dd class="col-sm-8"><strong><span id="item-price"></span></strong></dd>
                             <dt class="col-sm-4">${__("Description")}</dt><dd class="col-sm-8" id="item-description"></dd>
                         </dl>
@@ -170,7 +172,9 @@ function populateItemDetails(details, page) {
     const $main = $(page.main);
     $main.find('#item-name-title').text(details.item_name);
     $main.find('#item-code').text(details.item_code);
-    $main.find('#item-description').html(details.description || `<span class="text-muted">${__("No description provided.")}</span>`);
+	$main.find('#item-saturn-code').text(details.saturn_code || `${__("Not available")}`);
+	$main.find('#item-sku').text(details.sku || `${__("Not available")}`);
+    $main.find('#item-description').html(details.description || `${__("Not available")}`);
     $main.find('#item-group').text(details.item_group);
     $main.find('#item-price').text(format_currency(details.standard_selling_rate, frappe.defaults.get_default("currency")));
     if (details.image) {

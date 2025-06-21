@@ -43,6 +43,8 @@ def get_item_details_and_stock(scanned_value):
     item = frappe.get_doc("Item", item_code)
     details = {
         'item_code': item.item_code,
+        'saturn_code': item.saturn_code,
+        'sku': item.sku,
         'item_name': item.item_name,
         'description': item.description,
         'item_group': item.item_group,
