@@ -1,28 +1,46 @@
 import frappe
+from frappe import _
+# الدالة الجديدة لجلب معلومات الشركة
+@frappe.whitelist()
+def get_company_info():
+    # 1. جلب اسم الشركة الافتراضية
+    default_company = frappe.defaults.get_user_default("company")
+    if not default_company:
+        default_company = frappe.db.get_single_value("Global Defaults", "default_company")
 
+    if not default_company:
+        frappe.throw("No default company is set.")
+
+    # 2. جلب اسم Letter Head المرتبط بالشركة
+    letter_head_name = frappe.db.get_value("Company", default_company, "default_letter_head")
+
+    logo_url = ""
+    if letter_head_name:
+        logo_url = frappe.db.get_value("Letter Head", letter_head_name, "image")
+
+    # 3. إذا لم يوجد شعار، نجرب نجيبه من Website Settings
+    if not logo_url:
+        logo_url = frappe.db.get_single_value("Website Settings", "app_logo")
+
+    return {
+        "company_name": default_company,
+        "logo_url": logo_url or ""
+    }
+
+# الدالة الحالية تبقى كما هي
 @frappe.whitelist()
 def get_item_details_and_stock(scanned_value):
-    """
-    Finds an item by its Barcode or Item Code and returns its details and stock levels.
-    """
+    
     item_code = None
-
-    # 1. First, check if the scanned value is a direct Item Code.
     if frappe.db.exists("Item", scanned_value):
         item_code = scanned_value
     else:
-        # 2. If not, check if it's a barcode in the "Item Barcode" child table.
-        # The 'parent' field in the child table is the Item Code.
         item_code = frappe.db.get_value("Item Barcode", {"barcode": scanned_value}, "parent")
 
-    # 3. If no item was found by either method, throw an error.
-    if not item_code:
-        frappe.throw(f"لم يتم العثور على صنف مطابق للكود أو الباركود '{scanned_value}'", title="غير موجود")
-
-    # --- From here, the rest of the function proceeds as before, using the found item_code ---
+    # if not item_code:
+    #     frappe.throw(frappe._("Item with code or barcode '{0}' not found").format(scanned_value), title=frappe._("Not Found"))
 
     item = frappe.get_doc("Item", item_code)
-    
     details = {
         'item_code': item.item_code,
         'item_name': item.item_name,
@@ -31,15 +49,8 @@ def get_item_details_and_stock(scanned_value):
         'image': item.image,
         'standard_selling_rate': frappe.db.get_value("Item Price", {"item_code": item_code, "selling": 1}, "price_list_rate") or 0
     }
-
     stock_levels = frappe.db.sql("""
-        SELECT warehouse, actual_qty
-        FROM `tabBin`
-        WHERE item_code = %(item_code)s AND actual_qty > 0
-        ORDER BY warehouse ASC
+        SELECT warehouse, actual_qty FROM `tabBin`
+        WHERE item_code = %(item_code)s AND actual_qty > 0 ORDER BY warehouse ASC
     """, {'item_code': item_code}, as_dict=True)
-
-    return {
-        'details': details,
-        'stock_levels': stock_levels
-    }
+    return {'details': details, 'stock_levels': stock_levels}

@@ -1,88 +1,144 @@
-// item_details_view.js - V6 (Instant Search + Auto Focus)
+// item_details_view.js - V7 (Professional UI/UX & Bilingual)
 
 frappe.pages['item-details-view'].on_page_load = function(wrapper) {
     let page = frappe.ui.make_app_page({
         parent: wrapper,
-        title: 'عرض تفاصيل الصنف',
+        title: __("Item Details Viewer"), // Translatable Title
         single_column: true
     });
 
+    // Fetch company info first, then render the page
+    frappe.call({
+        method: "saturn.saturn.page.item_details_view.item_details_view.get_company_info",
+        callback: function(r) {
+            render_page_layout(page, r.message);
+            setup_page_logic(page);
+        }
+    });
+};
+
+function render_page_layout(page, company_info) {
     const page_html = `
         <style>
-            .item-details-view-container { direction: rtl; }
-            .page-card { background-color: #fff; border: 1px solid #d1d8dd; border-radius: 4px; padding: 15px; margin-bottom: 15px; }
-            #scanned-value-input { text-align: center; font-weight: bold; font-size: 1.2rem; }
+            .item-viewer-wrapper { direction: ${frappe.boot.lang === 'ar' ? 'rtl' : 'ltr'}; padding: 15px; }
+            .page-header-section {
+                display: flex; justify-content: space-between; align-items: center;
+                padding: 10px 15px; background-color: var(--control-bg); border-radius: var(--border-radius);
+                margin-bottom: 20px; border: 1px solid var(--border-color);
+            }
+            .company-logo img { max-height: 40px; }
+            .date-time-section { text-align: center; font-size: 1.1rem; font-weight: 500; color: var(--text-color); }
+            .search-card {
+                padding: 2rem; background-color: #fff; border-radius: var(--border-radius);
+                border: 1px solid var(--border-color); box-shadow: var(--shadow-xs);
+                margin-bottom: 25px; text-align: center;
+            }
+            #scanned-value-input { text-align: center; font-weight: bold; font-size: 1.5rem; max-width: 500px; margin: auto; }
+            .item-details-grid {
+                display: grid; grid-template-columns: 2fr 1fr; gap: 25px;
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            .item-main-details, .item-side-details {
+                background-color: #fff; border-radius: var(--border-radius);
+                border: 1px solid var(--border-color); padding: 20px; box-shadow: var(--shadow-xs);
+            }
+            .item-main-details h2 { font-weight: 600; margin-bottom: 25px; }
+            .item-image-wrapper { text-align: center; }
+            .item-image-wrapper img { max-width: 100%; max-height: 200px; border-radius: var(--border-radius); }
+            .missing-image-placeholder { background-color: #f8f9fa; padding: 40px; border: 1px dashed #d1d8dd; border-radius: var(--border-radius); }
+            @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+            @media (max-width: 768px) { .item-details-grid { grid-template-columns: 1fr; } }
         </style>
 
-        <div class="item-details-view-container">
-            <div class="page-card">
-                <h4><i class="fa fa-barcode"></i> مسح باركود الصنف</h4>
-                <p class="text-muted">يبدأ البحث تلقائياً بمجرد إدخال الباركود.</p>
-                <div class="form-group">
-                    <input type="text" id="scanned-value-input" class="form-control input-lg" placeholder="...في انتظار الباركود" autocomplete="off">
+        <div class="item-viewer-wrapper">
+            <div class="page-header-section">
+                <div class="company-logo">
+                    ${company_info.logo_url ? `<img src="${company_info.logo_url}" alt="${company_info.company_name}">` : `<span>${company_info.company_name || ''}</span>`}
+                </div>
+                <div class="date-time-section">
+                    <div id="current-date"></div>
+                    <div id="current-time"></div>
+                </div>
+                <div class="language-selector">
+                    <!-- Language switcher can be added here if needed -->
                 </div>
             </div>
-            <div id="loading-indicator" class="text-center" style="display: none; margin: 20px;"><div class="spinner-border text-primary" role="status"></div><p>...جاري البحث</p></div>
+
+            <div class="search-card">
+                <h4><i class="fa fa-barcode"></i> ${__("Scan Item Barcode")}</h4>
+                <p class="text-muted">${__("Search starts automatically after scanning or typing.")}</p>
+                <input type="text" id="scanned-value-input" class="form-control" placeholder="${__("Waiting for barcode...")}" autocomplete="off">
+            </div>
+
+            <div id="loading-indicator" class="text-center" style="display: none; margin: 20px;"><div class="spinner-border text-primary" role="status"></div></div>
             <div id="error-message" class="alert alert-danger" style="display: none; text-align: center;"></div>
+
             <div id="item-details-section" style="display: none;">
-                <!-- HTML for details and stock table remains the same -->
-                 <div class="page-card">
-                    <h2 id="item-name-title" class="mb-4"></h2>
-                    <div class="row">
-                        <div class="col-md-3 text-center"><div id="item-image"></div></div>
-                        <div class="col-md-9"><dl class="row"><dt class="col-sm-4">كود الصنف</dt><dd class="col-sm-8" id="item-code"></dd><dt class="col-sm-4">مجموعة الصنف</dt><dd class="col-sm-8" id="item-group"></dd><dt class="col-sm-4">سعر البيع</dt><dd class="col-sm-8"><strong><span id="item-price"></span></strong></dd><dt class="col-sm-4">الوصف</dt><dd class="col-sm-8" id="item-description"></dd></dl></div>
+                <!-- New Two-Column Layout -->
+                <div class="item-details-grid">
+                    <div class="item-main-details">
+                        <h2 id="item-name-title"></h2>
+                        <dl class="row">
+                            <dt class="col-sm-4">${__("Item Code")}</dt><dd class="col-sm-8" id="item-code"></dd>
+                            <dt class="col-sm-4">${__("Item Group")}</dt><dd class="col-sm-8" id="item-group"></dd>
+                            <dt class="col-sm-4">${__("Standard Selling Price")}</dt><dd class="col-sm-8"><strong><span id="item-price"></span></strong></dd>
+                            <dt class="col-sm-4">${__("Description")}</dt><dd class="col-sm-8" id="item-description"></dd>
+                        </dl>
                     </div>
-                </div>
-                <div class="page-card">
-                    <h4><i class="fa fa-cubes"></i> الكميات في المخازن</h4>
-                    <div class="table-responsive"><table class="table table-bordered table-hover"><thead class="thead-light"><tr><th>المخزن</th><th>الكمية الفعلية</th></tr></thead><tbody id="stock-levels-table-body"></tbody></table></div>
+                    <div class="item-side-details">
+                        <div class="item-image-wrapper mb-3" id="item-image"></div>
+                        <h5><i class="fa fa-cubes"></i> ${__("Stock Levels")}</h5>
+                        <div class="table-responsive"><table class="table table-hover"><tbody id="stock-levels-table-body"></tbody></table></div>
+                    </div>
                 </div>
             </div>
         </div>
     `;
-
     $(page.main).html(page_html);
-    setup_page_logic(page);
-};
+}
 
-// **This is where the magic happens!**
 function setup_page_logic(page) {
     const $main = $(page.main);
     const $input = $main.find('#scanned-value-input');
     
-    // 1. **Auto Focus**: Focus on the input field as soon as the page loads.
-    // We add a small delay to ensure the element is fully rendered.
-    setTimeout(() => {
-        $input.focus();
-    }, 100);
+    // Auto Focus
+    setTimeout(() => { $input.focus(); }, 200);
 
+    // Live Clock
+    update_time();
+    setInterval(update_time, 1000);
+
+    // Debounced Search
     let debounce_timer;
-
-    // 2. **Instant Search**: Use the 'input' event instead of 'change'.
     $input.on('input', function() {
-        // Clear the previous timer
         clearTimeout(debounce_timer);
-        
         const scannedValue = $(this).val().trim();
-
         if (scannedValue) {
-            // Set a new timer. The fetch function will only run after 300ms of inactivity.
-            // This is perfect for barcode scanners (which are very fast) and prevents spamming the server with manual typing.
             debounce_timer = setTimeout(() => {
                 fetchItemData(scannedValue, page);
-            }, 300); // 300 milliseconds delay
+            }, 300);
         } else {
-            // If the input is cleared, hide the details section
             $main.find('#item-details-section').hide();
             $main.find('#error-message').hide();
         }
     });
 }
 
+function update_time() {
+    const now = new Date();
+    const lang = frappe.boot.lang;
+    const date_options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const time_options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+    
+    $('#current-date').text(now.toLocaleDateString(lang === 'ar' ? 'ar-SA' : 'en-US', date_options));
+    $('#current-time').text(now.toLocaleTimeString(lang === 'ar' ? 'ar-EG' : 'en-US', time_options));
+}
 
-// No changes are needed in the functions below this line
-// =======================================================
+function fetchItemData(scannedValue, page) { /* No changes here */ }
+function populateItemDetails(details, page) { /* No changes here */ }
+function populateStockLevels(stockLevels, page) { /* No changes here, just copy from previous version */ }
 
+// --- PASTE THE UNCHANGED FUNCTIONS FROM THE PREVIOUS VERSION HERE ---
 function fetchItemData(scannedValue, page) {
     const $main = $(page.main);
     const $detailsSection = $main.find('#item-details-section');
@@ -95,9 +151,7 @@ function fetchItemData(scannedValue, page) {
 
     frappe.call({
         method: 'saturn.saturn.page.item_details_view.item_details_view.get_item_details_and_stock',
-        args: {
-            scanned_value: scannedValue
-        },
+        args: { scanned_value: scannedValue },
         callback: function(r) {
             if (r.message) {
                 populateItemDetails(r.message.details, page);
@@ -106,14 +160,33 @@ function fetchItemData(scannedValue, page) {
             }
         },
         error: function(r) {
-            $detailsSection.hide(); // Hide old results if there's an error
-            $error.html(r.message || "حدث خطأ غير متوقع.").show();
+            $detailsSection.hide();
+            $error.html(r.message || __("An unexpected error occurred.")).show();
         },
-        always: function() {
-            $loading.hide();
-        }
+        always: function() { $loading.hide(); }
     });
 }
-
-function populateItemDetails(details, page) { /* ... no change ... */ const $main = $(page.main); $main.find('#item-name-title').text(details.item_name); $main.find('#item-code').text(details.item_code); $main.find('#item-description').html(details.description || '<span class="text-muted">لا يوجد وصف</span>'); $main.find('#item-group').text(details.item_group); $main.find('#item-price').text(format_currency(details.standard_selling_rate, frappe.defaults.get_default("currency"))); if (details.image) { $main.find('#item-image').html(`<img src="${details.image}" class="img-fluid" alt="${details.item_name}">`); } else { $main.find('#item-image').html('<div class="missing-image"><i class="fa fa-camera fa-5x text-muted"></i></div>'); } }
-function populateStockLevels(stockLevels, page) { /* ... no change ... */ const $stockTableBody = $(page.main).find('#stock-levels-table-body'); $stockTableBody.empty(); if (stockLevels.length === 0) { $stockTableBody.append(`<tr><td colspan="2" class="text-center text-muted p-4">هذا الصنف غير متوفر في أي مخزن حاليًا.</td></tr>`); } else { stockLevels.forEach(stock => { $stockTableBody.append(`<tr><td>${stock.warehouse}</td><td><span class="badge badge-lg" style="background-color: #17a2b8; color: white; font-size: 1.1em;">${stock.actual_qty}</span></td></tr>`); }); } }
+function populateItemDetails(details, page) {
+    const $main = $(page.main);
+    $main.find('#item-name-title').text(details.item_name);
+    $main.find('#item-code').text(details.item_code);
+    $main.find('#item-description').html(details.description || `<span class="text-muted">${__("No description provided.")}</span>`);
+    $main.find('#item-group').text(details.item_group);
+    $main.find('#item-price').text(format_currency(details.standard_selling_rate, frappe.defaults.get_default("currency")));
+    if (details.image) {
+        $main.find('#item-image').html(`<img src="${details.image}" class="img-fluid" alt="${details.item_name}">`);
+    } else {
+        $main.find('#item-image').html(`<div class="missing-image-placeholder"><i class="fa fa-camera fa-3x text-muted"></i></div>`);
+    }
+}
+function populateStockLevels(stockLevels, page) {
+    const $stockTableBody = $(page.main).find('#stock-levels-table-body');
+    $stockTableBody.empty();
+    if (stockLevels.length === 0) {
+        $stockTableBody.append(`<tr><td class="text-center text-muted p-3">${__("This item is not available in any warehouse.")}</td></tr>`);
+    } else {
+        stockLevels.forEach(stock => {
+            $stockTableBody.append(`<tr><td>${stock.warehouse}</td><td class="text-right"><strong>${stock.actual_qty}</strong></td></tr>`);
+        });
+    }
+}
