@@ -39,7 +39,9 @@ def get_item_details_and_stock(scanned_value):
 
     # if not item_code:
     #     frappe.throw(frappe._("Item with code or barcode '{0}' not found").format(scanned_value), title=frappe._("Not Found"))
-
+    if not item_code:
+        # بدلاً من إطلاق خطأ، نرجع قيمة فارغة
+        return None 
     item = frappe.get_doc("Item", item_code)
     details = {
         'item_code': item.item_code,
