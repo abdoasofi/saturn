@@ -37,16 +37,14 @@ def get_item_details_and_stock(scanned_value):
     else:
         item_code = frappe.db.get_value("Item Barcode", {"barcode": scanned_value}, "parent")
 
-    # if not item_code:
-    #     frappe.throw(frappe._("Item with code or barcode '{0}' not found").format(scanned_value), title=frappe._("Not Found"))
     if not item_code:
-        # بدلاً من إطلاق خطأ، نرجع قيمة فارغة
-        return None 
+        return None
+        
     item = frappe.get_doc("Item", item_code)
     details = {
         'item_code': item.item_code,
-        'saturn_code': item.saturn_code,
-        'sku': item.sku,
+        'saturn_code': item.get('saturn_code'),
+        'sku': item.get('sku'),
         'item_name': item.item_name,
         'description': item.description,
         'item_group': item.item_group,
@@ -54,7 +52,18 @@ def get_item_details_and_stock(scanned_value):
         'standard_selling_rate': frappe.db.get_value("Item Price", {"item_code": item_code, "selling": 1}, "price_list_rate") or 0
     }
     stock_levels = frappe.db.sql("""
-        SELECT warehouse, actual_qty FROM `tabBin`
-        WHERE item_code = %(item_code)s AND actual_qty > 0 ORDER BY warehouse ASC
+        SELECT
+            bin.warehouse, 
+            bin.actual_qty 
+        FROM 
+            `tabBin` AS bin
+        JOIN 
+            `tabWarehouse` AS wh ON bin.warehouse = wh.name
+        WHERE 
+            bin.item_code = %(item_code)s 
+            AND bin.actual_qty > 0 
+            AND wh.custom_in_item_details_viewer = 1
+        ORDER BY 
+            bin.warehouse ASC
     """, {'item_code': item_code}, as_dict=True)
     return {'details': details, 'stock_levels': stock_levels}
