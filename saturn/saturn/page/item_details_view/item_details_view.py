@@ -41,6 +41,8 @@ def get_item_details_and_stock(scanned_value):
         return None
         
     item = frappe.get_doc("Item", item_code)
+    EN_GROSS = frappe.db.get_value("Item Price", {"item_code": item_code, "selling": 1 , "price_list": "EN-GROSS"}, "price_list_rate") or 0
+    EN_DETAIL_SHOWROOM = frappe.db.get_value("Item Price", {"item_code": item_code, "selling": 1 , "price_list": "EN-DETAIL SHOWROOM"}, "price_list_rate") or 0
     details = {
         'item_code': item.item_code,
         'saturn_code': item.get('saturn_code'),
@@ -49,7 +51,8 @@ def get_item_details_and_stock(scanned_value):
         'description': item.description,
         'item_group': item.item_group,
         'image': item.image,
-        'standard_selling_rate': frappe.db.get_value("Item Price", {"item_code": item_code, "selling": 1}, "price_list_rate") or 0
+        'EN_DETAIL_SHOWROOM': EN_DETAIL_SHOWROOM,
+        'EN_GROSS': EN_GROSS
     }
     stock_levels = frappe.db.sql("""
         SELECT
