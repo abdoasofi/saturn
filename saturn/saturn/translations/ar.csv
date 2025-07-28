@@ -32,3 +32,7 @@
 "Camera Error","خطأ في الكاميرا"
 "Could not start camera. Please grant permission and ensure you are on a secure (https) connection.","تعذر بدء تشغيل الكاميرا. يرجى منح الإذن والتأكد من أنك على اتصال آمن (https)."
 "Failed to load required libraries. Please check your internet connection.","فشل تحميل المكتبات المطلوبة. يرجى التحقق من اتصالك بالإنترنت."
+"Legal Stock Quantities","الكميات القانونية للصنف"
+"Legal Qty","الكمية القانونية"
+"Actual Qty","الكمية الفعلية"
+"Difference","الفارق"

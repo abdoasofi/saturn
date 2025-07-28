@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"09duIuItsn\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Saturn</span>\",\"col\":12}},{\"id\":\"oJsiH_Rbh8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Payment Method\",\"col\":3}},{\"id\":\"k7kbci3Fwp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Method\",\"col\":3}},{\"id\":\"e6rVqLwC66\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Reports<b></b></span>\",\"col\":12}},{\"id\":\"ltuDwD1PZz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item Details View\",\"col\":3}},{\"id\":\"D1kFLuConI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Balance With Barcode Scanning Feature\",\"col\":3}}]",
+ "content": "[{\"id\":\"09duIuItsn\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Saturn</span>\",\"col\":12}},{\"id\":\"oJsiH_Rbh8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Payment Method\",\"col\":3}},{\"id\":\"k7kbci3Fwp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Method\",\"col\":3}},{\"id\":\"e6rVqLwC66\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Reports<b></b></span>\",\"col\":12}},{\"id\":\"ltuDwD1PZz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item Details View\",\"col\":3}},{\"id\":\"QZWUIQ6IkG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Legal Stock Quantities\",\"col\":3}},{\"id\":\"D1kFLuConI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Balance With Barcode Scanning Feature\",\"col\":3}}]",
  "creation": "2025-05-30 23:20:27.437131",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Saturn",
  "links": [],
- "modified": "2025-06-21 19:21:34.528926",
+ "modified": "2025-07-28 21:57:51.993489",
  "modified_by": "Administrator",
  "module": "Saturn",
  "name": "Saturn",
@@ -39,6 +39,13 @@
    "label": "Stock Balance With Barcode Scanning Feature",
    "link_to": "Stock Balance With Barcode Scanning Feature",
    "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Legal Stock Quantities",
+   "link_to": "legal-stock-quantiti",
+   "type": "Page"
   },
   {
    "color": "Grey",
