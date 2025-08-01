@@ -1,0 +1,46 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-28 23:15:15.135507",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "item",
+  "column_break_fewa",
+  "sku_quantity"
+ ],
+ "fields": [
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item",
+   "options": "Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_fewa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sku_quantity",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "SKU Quantity",
+   "non_negative": 1,
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-28 23:22:07.884334",
+ "modified_by": "Administrator",
+ "module": "Saturn",
+ "name": "SKU Quantity The Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

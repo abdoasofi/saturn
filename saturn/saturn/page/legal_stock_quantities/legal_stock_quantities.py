@@ -30,6 +30,7 @@ def get_company_info():
 
 @frappe.whitelist()
 def get_item_details_and_stock(scanned_value):
+    
     item_code = None
     if frappe.db.exists("Item", scanned_value):
         item_code = scanned_value
@@ -54,18 +55,29 @@ def get_item_details_and_stock(scanned_value):
         'legal_quantity': item.get('quantity_sku') or 0
     }
     
-    # لقد أعدت استخدام استعلامك الأصلي لأنه كان صحيحاً
-    stock_levels = frappe.db.sql("""
+    # --- التغيير الرئيسي هنا ---
+    # نستخدم SUM() لتجميع الكميات الفعلية ونعطيها اسماً مستعاراً 'total_actual_qty'
+    total_stock = frappe.db.sql("""
         SELECT
-            bin.warehouse, 
-            bin.actual_qty 
+            SUM(bin.actual_qty) as total_actual_qty 
         FROM `tabBin` AS bin
         JOIN `tabWarehouse` AS wh ON bin.warehouse = wh.name
         WHERE 
             bin.item_code = %(item_code)s 
             AND bin.actual_qty > 0 
             AND wh.custom_in_item_details_viewer = 1
-        ORDER BY bin.warehouse ASC
     """, {'item_code': item_code}, as_dict=True)
     
-    return {'details': details, 'stock_levels': stock_levels}
+    # استعلام SQL سيعيد قائمة تحتوي على عنصر واحد (أو لا شيء)
+    # [ {'total_actual_qty': 150.0} ]  أو  [ {'total_actual_qty': None} ]
+    
+    # نستخرج القيمة ونعطيها قيمة افتراضية 0 إذا كانت النتيجة فارغة
+    total_actual_qty = total_stock[0].get('total_actual_qty') if total_stock and total_stock[0] else 0
+    
+    # نعيد البيانات بتنسيق جديد وبسيط
+    return {
+        'details': details,
+        'stock_levels': {
+            'total_actual_qty': total_actual_qty or 0
+        }
+    }

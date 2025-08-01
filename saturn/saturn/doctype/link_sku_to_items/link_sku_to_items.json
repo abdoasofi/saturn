@@ -1,0 +1,88 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:SKU-{sku}-{#####}",
+ "creation": "2025-07-28 23:12:58.309157",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sku",
+  "update_quantities_in_items",
+  "update_sku_in_items",
+  "column_break_axgf",
+  "total_sku_quantity",
+  "section_break_ywuv",
+  "get_items",
+  "sku_quantity_the_item"
+ ],
+ "fields": [
+  {
+   "fieldname": "sku",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "SKU",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_axgf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_sku_quantity",
+   "fieldtype": "Float",
+   "label": "Total SKU Quantity"
+  },
+  {
+   "fieldname": "section_break_ywuv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "Get All Items With The Same SKU",
+   "fieldname": "get_items",
+   "fieldtype": "Button",
+   "label": "Get Items"
+  },
+  {
+   "fieldname": "sku_quantity_the_item",
+   "fieldtype": "Table",
+   "label": "SKU Quantity The Item",
+   "options": "SKU Quantity The Item"
+  },
+  {
+   "fieldname": "update_quantities_in_items",
+   "fieldtype": "Button",
+   "label": "Update Quantities in Items"
+  },
+  {
+   "fieldname": "update_sku_in_items",
+   "fieldtype": "Button",
+   "label": "Update SKU in Items"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-29 00:16:47.734846",
+ "modified_by": "Administrator",
+ "module": "Saturn",
+ "name": "Link SKU To Items",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -253,31 +253,25 @@ function populateItemDetails(details, page) {
     generateQRCode(details.item_code, details.item_name);
 }
 
-function populateStockLevels(stockLevels, legal_qty) {
+function populateStockLevels(stock_data, legal_qty) {
     const $stockTableBody = $('#stock-levels-table-body');
     $stockTableBody.empty();
-    if (stockLevels.length === 0) {
-        $stockTableBody.append(`<tr><td colspan="4" class="text-center text-muted p-3">${__("This item is not available in any warehouse.")}</td></tr>`);
-        return;
-    }
-    stockLevels.forEach(stock => {
-        const actual_qty = parseFloat(stock.actual_qty);
-        const legal = parseFloat(legal_qty) || 0;
-        let difference = actual_qty - legal;
-        let diff_class = difference < 0 ? 'text-danger' : (difference > 0 ? 'text-success' : '');
-        if (difference < 0) {
-            difference = -difference; // Invert the difference for display
-        }
-        const row = `
-            <tr>
-                <td>${stock.warehouse}</td>
-                <td class="text-right"><strong>${actual_qty.toFixed(2)}</strong></td>
-                <td class="text-right">${legal.toFixed(2)}</td>
-                <td class="text-right font-weight-bold ${diff_class}">${difference.toFixed(2)}</td>
-            </tr>
-        `;
-        $stockTableBody.append(row);
-    });
+
+    const actual_qty = parseFloat(stock_data.total_actual_qty) || 0;
+    const legal = parseFloat(legal_qty) || 0;
+    let difference = actual_qty - legal;
+    let diff_class = difference < 0 ? 'text-danger' : (difference > 0 ? 'text-success' : '');
+    if (difference < 0 )
+        difference =  -difference
+    const row = `
+        <tr>
+            <td>${__("Total in All Warehouses")}</td>
+            <td class="text-right"><strong>${actual_qty.toFixed(2)}</strong></td>
+            <td class="text-right">${legal.toFixed(2)}</td>
+            <td class="text-right font-weight-bold ${diff_class}">${difference.toFixed(2)}</td>
+        </tr>
+    `;
+    $stockTableBody.append(row);
 }
 
 function generateQRCode(item_code, item_name) {
