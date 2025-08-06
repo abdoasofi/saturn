@@ -94,8 +94,8 @@ function render_page_layout(page, company_info) {
                                     <thead>
                                         <tr>
                                             <th>${__("Warehouse")}</th>
-                                            <th class="text-right">${__("Actual Qty")}</th>
-                                            <th class="text-right">${__("Legal Qty")}</th>
+                                            <th class="text-right">${__("Stock Qty")}</th>
+                                            <th class="text-right">${__("X Qty")}</th>
                                             <th class="text-right">${__("Difference")}</th>
                                         </tr>
                                     </thead>
