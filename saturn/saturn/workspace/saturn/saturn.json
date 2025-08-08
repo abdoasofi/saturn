@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Saturn",
  "links": [],
- "modified": "2025-08-08 20:45:53.553062",
+ "modified": "2025-08-08 20:48:15.524251",
  "modified_by": "Administrator",
  "module": "Saturn",
  "name": "Saturn",
@@ -22,7 +22,23 @@
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Stock Manager"
+  },
+  {
+   "role": "Stock User"
+  },
+  {
+   "role": "Administrator"
+  }
+ ],
  "sequence_id": 1.0,
  "shortcuts": [
   {
