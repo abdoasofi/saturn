@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"09duIuItsn\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Saturn</span>\",\"col\":12}},{\"id\":\"oJsiH_Rbh8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Payment Method\",\"col\":3}},{\"id\":\"k7kbci3Fwp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Method\",\"col\":3}},{\"id\":\"RaF62R5pTu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"e6rVqLwC66\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Reports<b></b></span>\",\"col\":12}},{\"id\":\"ltuDwD1PZz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item Details View\",\"col\":3}},{\"id\":\"MayBp_WXly\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Legal Stock Quantities\",\"col\":3}},{\"id\":\"3S1OvgWBae\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Link SKU To Items\",\"col\":3}},{\"id\":\"cA66bUII1t\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"D1kFLuConI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Balance With Barcode Scanning Feature\",\"col\":3}}]",
+ "content": "[{\"id\":\"09duIuItsn\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Saturn</span>\",\"col\":12}},{\"id\":\"oJsiH_Rbh8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Payment Method\",\"col\":3}},{\"id\":\"k7kbci3Fwp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Method\",\"col\":3}},{\"id\":\"RaF62R5pTu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"e6rVqLwC66\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Reports<b></b></span>\",\"col\":12}},{\"id\":\"ltuDwD1PZz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item Details View\",\"col\":3}},{\"id\":\"MayBp_WXly\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Legal Stock Quantities\",\"col\":3}},{\"id\":\"3S1OvgWBae\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Link SKU To Items\",\"col\":3}},{\"id\":\"cA66bUII1t\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"D1kFLuConI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Balance With Barcode Scanning Feature\",\"col\":3}},{\"id\":\"RSNWv4i16u\",\"type\":\"spacer\",\"data\":{\"col\":12}}]",
  "creation": "2025-05-30 23:20:27.437131",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Saturn",
  "links": [],
- "modified": "2025-08-08 20:50:19.087637",
+ "modified": "2025-08-19 16:28:55.734332",
  "modified_by": "Administrator",
  "module": "Saturn",
  "name": "Saturn",
