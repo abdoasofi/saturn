@@ -30,7 +30,6 @@ frappe.pages['legal-stock-quantities'].on_page_load = function(wrapper) {
 // --- RENDER PAGE LAYOUT ---
 function render_page_layout(page, company_info) {
     const is_rtl = frappe.boot.lang === 'ar';
-    // This is the full, correct HTML template
     const page_html = `
         <style>
             .item-viewer-wrapper { padding: 15px; background-color: #f8f9fa; min-height: 100vh;}
