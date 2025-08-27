@@ -43,7 +43,10 @@ app_license = "mit"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+# doctype_js = {
+#     "Customer" : "public/js/customer.js",
+#     "Sales Order" : "public/js/sales_order.js"
+#     }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -138,11 +141,11 @@ app_license = "mit"
 # Hook on document methods and events
 
 # doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
+#     "Sales Order": {
+#         "validate": "saturn.loyalty_program_extension.so_before_validate",
+#         "on_submit": "saturn.loyalty_program_extension.so_on_submit",
+#         "on_cancel": "saturn.loyalty_program_extension.so_on_cancel"
+#     }
 # }
 
 # Scheduled Tasks
@@ -242,3 +245,11 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+fixtures = [
+    {
+        "doctype": "Print Format",
+        "filters": [
+            ["name", "in", ["Custom Material Request Layout"]]
+        ]
+    }
+    ]
