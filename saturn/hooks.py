@@ -140,13 +140,13 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-#     "Sales Order": {
-#         "validate": "saturn.loyalty_program_extension.so_before_validate",
-#         "on_submit": "saturn.loyalty_program_extension.so_on_submit",
-#         "on_cancel": "saturn.loyalty_program_extension.so_on_cancel"
-#     }
-# }
+doc_events = {
+    "Sales Order": {
+        "validate": "saturn.loyalty_program_extension.so_before_validate",
+        "on_submit": "saturn.loyalty_program_extension.so_on_submit",
+        "on_cancel": "saturn.loyalty_program_extension.so_on_cancel"
+    }
+}
 
 # Scheduled Tasks
 # ---------------
@@ -251,5 +251,19 @@ fixtures = [
         "filters": [
             ["name", "in", ["Custom Material Request Layout"]]
         ]
-    }
+    },
+    # {
+    #     "doctype": "Property Setter",
+    #     "filters": [
+    #         ["name", "in", [
+    #             "Sales Order-main-field_order",
+    #             "Sales Order-loyalty_points_redemption-hidden",
+    #             "Sales Order-loyalty_points-read_only",
+    #             "Sales Order-loyalty_amount-hidden",
+    #             "Sales Order-loyalty_points-hidden"
+    #         ]]
+    #     ]
+    # }
+    
+    
     ]
