@@ -43,10 +43,10 @@ app_license = "mit"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {
-#     "Customer" : "public/js/customer.js",
-#     "Sales Order" : "public/js/sales_order.js"
-#     }
+doctype_js = {
+    "Customer" : "public/js/customer.js",
+    "Sales Order" : "public/js/sales_order.js"
+    }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -140,13 +140,13 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-#     "Sales Order": {
-#         "validate": "saturn.loyalty_program_extension.so_before_validate",
-#         "on_submit": "saturn.loyalty_program_extension.so_on_submit",
-#         "on_cancel": "saturn.loyalty_program_extension.so_on_cancel"
-#     }
-# }
+doc_events = {
+    "Sales Order": {
+        "validate": "saturn.loyalty_program_extension.so_before_validate",
+        "on_submit": "saturn.loyalty_program_extension.so_on_submit",
+        "on_cancel": "saturn.loyalty_program_extension.so_on_cancel"
+    }
+}
 
 # Scheduled Tasks
 # ---------------
@@ -252,18 +252,33 @@ fixtures = [
             ["name", "in", ["Custom Material Request Layout"]]
         ]
     },
-    # {
-    #     "doctype": "Property Setter",
-    #     "filters": [
-    #         ["name", "in", [
-    #             "Sales Order-main-field_order",
-    #             "Sales Order-loyalty_points_redemption-hidden",
-    #             "Sales Order-loyalty_points-read_only",
-    #             "Sales Order-loyalty_amount-hidden",
-    #             "Sales Order-loyalty_points-hidden"
-    #         ]]
-    #     ]
-    # }
+    {
+        "doctype": "Property Setter",
+        "filters": [
+            ["name", "in", [
+                # Sales Order
+                "Sales Order-main-field_order",
+                "Sales Order-main-links_order",
+                
+                "Sales Order-loyalty_points_redemption-hidden",
+                "Sales Order-loyalty_points-read_only",
+                "Sales Order-loyalty_points-no_copy",
+                "Sales Order-loyalty_points-hidden",
+                "Sales Order-loyalty_points-depends_on",
+                "Sales Order-loyalty_points-mandatory_depends_on",
+                
+                "Sales Order-loyalty_amount-hidden",
+                "Sales Order-loyalty_amount-no_copy",
+                "Sales Order-loyalty_amount-depends_on",
+                "Sales Order-loyalty_amount-mandatory_depends_on",
+                # Customer
+                "Customer-main-default_print_format",
+                "Customer-main-field_order",
+                # Loyalty Program
+                "Loyalty Program-main-links_order",
+            ]]
+        ]
+    }
     
     
     ]
