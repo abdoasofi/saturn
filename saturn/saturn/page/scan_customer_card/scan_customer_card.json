@@ -1,0 +1,19 @@
+{
+ "content": null,
+ "creation": "2025-08-31 22:25:31.966613",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2025-08-31 22:25:31.966613",
+ "modified_by": "Administrator",
+ "module": "Saturn",
+ "name": "scan-customer-card",
+ "owner": "Administrator",
+ "page_name": "scan-customer-card",
+ "roles": [],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Scan Customer Card"
+}
