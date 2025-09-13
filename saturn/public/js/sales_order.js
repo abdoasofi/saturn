@@ -1,4 +1,10 @@
 frappe.ui.form.on('Sales Order', {
+    onload(frm) {
+        set_user_naming_series(frm);
+    },
+    refresh(frm) {
+        set_user_naming_series(frm);
+    },    
     setup: function(frm) {
         frm.loyalty_details = {};
     },
@@ -95,3 +101,25 @@ frappe.ui.form.on('Sales Order', {
 	// 	});
 	// }
 });
+
+function set_user_naming_series(frm) {
+    // جلب قيمة الحقل من ملف المستخدم الحالي
+    frappe.db.get_value('User', frappe.session.user, 'sales_order_naming_series')
+    .then(r => {
+        const val = r.message ? r.message.sales_order_naming_series : null;
+        if (val) {
+            // لو القيمة موجودة، اضبط الحقل (لو مختلف) واجعله قراءة فقط
+            if (frm.doc.naming_series !== val) {
+                frm.set_value('naming_series', val);
+            }
+            frm.set_df_property('naming_series', 'read_only', 1);
+        } else {
+            // لو المستخدم ما عنده قيمة، خله قابل للتعديل
+            frm.set_df_property('naming_series', 'read_only', 0);
+        }
+    })
+    .catch(() => {
+        // في حالة خطأ بسيط، خليه قابل للتعديل بدل ما يكسر الفورم
+        frm.set_df_property('naming_series', 'read_only', 0);
+    });
+}

@@ -278,7 +278,12 @@ fixtures = [
                 "Loyalty Program-main-links_order",
             ]]
         ]
+    },
+    {
+        "doctype": "Custom Field",
+        "filters": [
+            ["dt", "=", "User"]
+        ]
     }
-    
     
     ]
