@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"76vo2T2-hp\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Saturn</span>\",\"col\":12}},{\"id\":\"hmlftnwCRT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Payment Method\",\"col\":3}},{\"id\":\"I3_sbQCMk6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Order\",\"col\":3}},{\"id\":\"Pe757d7_Ur\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Method\",\"col\":3}},{\"id\":\"CYJ0WUfs1Y\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"wId4-WevsR\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"um0_GvI7is\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item Details View\",\"col\":3}},{\"id\":\"ATZAMrjgeZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Legal Stock Quantities\",\"col\":3}},{\"id\":\"IkoIjno_nI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Link SKU To Items\",\"col\":3}},{\"id\":\"i05_m9zAup\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Hq3YIM6mNp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Balance With Barcode Scanning Feature\",\"col\":3}}]",
+ "content": "[{\"id\":\"76vo2T2-hp\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Saturn</span>\",\"col\":12}},{\"id\":\"hmlftnwCRT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Payment Method\",\"col\":3}},{\"id\":\"I3_sbQCMk6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Order\",\"col\":3}},{\"id\":\"Pe757d7_Ur\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Method\",\"col\":3}},{\"id\":\"CYJ0WUfs1Y\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item\",\"col\":3}},{\"id\":\"wId4-WevsR\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"um0_GvI7is\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Item Details View\",\"col\":3}},{\"id\":\"ATZAMrjgeZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Legal Stock Quantities\",\"col\":3}},{\"id\":\"IkoIjno_nI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Link SKU To Items\",\"col\":3}},{\"id\":\"i05_m9zAup\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Hq3YIM6mNp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Balance With Barcode Scanning Feature\",\"col\":3}},{\"id\":\"L0pEOufT-l\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"PunS0c_p58\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Scan Customer Card\",\"col\":3}},{\"id\":\"69ebYxMwiO\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loyalty Program\",\"col\":3}},{\"id\":\"kfUSiOMkSa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Loyalty Point Entry\",\"col\":3}}]",
  "creation": "2025-08-24 21:40:38.906103",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Saturn",
  "links": [],
- "modified": "2025-08-24 21:55:00.249892",
+ "modified": "2025-09-06 23:39:21.990423",
  "modified_by": "Administrator",
  "module": "Saturn",
  "name": "Saturn",
@@ -28,6 +28,13 @@
   {
    "color": "Grey",
    "doc_view": "List",
+   "label": "Scan Customer Card",
+   "link_to": "scan-customer-card",
+   "type": "Page"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
    "label": "Payment Method",
    "link_to": "Payment Method",
    "stats_filter": "[]",
@@ -39,6 +46,14 @@
    "label": "Item Details View",
    "link_to": "item-details-view",
    "type": "Page"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Loyalty Program",
+   "link_to": "Loyalty Program",
+   "stats_filter": "[]",
+   "type": "DocType"
   },
   {
    "color": "Grey",
@@ -68,6 +83,14 @@
    "doc_view": "List",
    "label": "Link SKU To Items",
    "link_to": "Link SKU To Items",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Loyalty Point Entry",
+   "link_to": "Loyalty Point Entry",
    "stats_filter": "[]",
    "type": "DocType"
   },
