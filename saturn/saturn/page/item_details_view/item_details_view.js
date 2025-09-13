@@ -132,6 +132,42 @@ function setup_page_logic(page) {
 
 function fetchItemData(scannedValue, page) { const $main = $(page.main); const $input = $main.find('#scanned-value-input'); const $detailsSection = $main.find('#item-details-section'); const $loading = $main.find('#loading-indicator'); const $error = $main.find('#error-message'); $loading.show(); $detailsSection.hide(); $error.hide(); frappe.call({ method: 'saturn.saturn.page.item_details_view.item_details_view.get_item_details_and_stock', args: { scanned_value: scannedValue }, callback: function(r) { if (r.message) { populateItemDetails(r.message.details, page); populateStockLevels(r.message.stock_levels, page); $detailsSection.show(); } else { const error_msg = frappe.format(__("Item with barcode '{0}' not found or is incorrect."), [scannedValue]); $error.html(`<h5><i class="fa fa-exclamation-triangle"></i> ${__("Item Not Found")}</h5><p>${error_msg}</p>`).show(); $input.val(''); } }, error: function(r) { $error.html(`<h5>${__("Server Error")}</h5><p>${__("An unexpected error occurred.")}</p>`).show(); $detailsSection.hide(); }, always: function() { $loading.hide(); $input.focus(); } }); }
 function populateItemDetails(details, page) { const $main = $(page.main); $main.find('#item-name-title').text(details.item_name); $main.find('#item-code').text(details.item_code); $main.find('#item-saturn-code').text(details.saturn_code || `-`); $main.find('#item-sku').text(details.sku || `-`); $main.find('#item-description').html(details.description || `<span class="text-muted">${__("Not available")}</span>`); $main.find('#item-group').text(details.item_group); const formatted_price_1 = format_currency(details.EN_DETAIL_SHOWROOM, frappe.defaults.get_default("currency"), 2); $main.find('#item-price_1').text(formatted_price_1); const formatted_price_2 = format_currency(details.EN_GROSS, frappe.defaults.get_default("currency"), 2); $main.find('#item-price_2').text(formatted_price_2); if (details.image) { $main.find('#item-image').html(`<img src="${details.image}" class="img-fluid" alt="${details.item_name}">`); } else { $main.find('#item-image').html(`<div class="missing-image-placeholder"><i class="fa fa-camera fa-3x text-muted"></i></div>`); } generateQRCode(details.item_code, details.item_name); }
-function populateStockLevels(stockLevels, page) { const $stockTableBody = $(page.main).find('#stock-levels-table-body'); $stockTableBody.empty(); if (stockLevels.length === 0) { $stockTableBody.append(`<tr><td colspan="2" class="text-center text-muted p-3">${__("This item is not available in any warehouse.")}</td></tr>`); } else { stockLevels.forEach(stock => { $stockTableBody.append(`<tr><td>${stock.warehouse}</td><td class="text-right"><strong>${stock.actual_qty}</strong></td></tr>`); }); } }
 function generateQRCode(item_code, item_name) { const container = document.getElementById('item-qrcode-container'); container.innerHTML = ''; new QRCode(container, { text: item_code, width: 128, height: 128, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H }); $('#download-qr-btn').off('click').on('click', function() { const qrCanvas = container.querySelector('canvas'); if (qrCanvas) { const link = document.createElement('a'); link.download = `QR-${item_name.replace(/[\s/\\?%*:|"<>]/g, '_')}.png`; link.href = qrCanvas.toDataURL('image/png'); link.click(); } }); }
 function update_time() { const now = new Date(); const lang = frappe.boot.lang; const date_options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; const time_options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }; $('#current-date').text(now.toLocaleDateString(lang === 'ar' ? 'ar-SA' : 'en-US', date_options)); $('#current-time').text(now.toLocaleTimeString(lang === 'ar' ? 'ar-EG' : 'en-US', time_options)); }
+function populateStockLevels(stockLevels, page) {
+    const $stockTableBody = $(page.main).find('#stock-levels-table-body');
+    $stockTableBody.empty();
+
+    // Helper: تحويل النص/قيمة لرقم صالح مع تجاهل الفواصل
+    const toNumber = (v) => {
+        if (v === null || v === undefined) return 0;
+        const s = String(v).replace(/,/g, '').trim();
+        const n = parseFloat(s);
+        return isNaN(n) ? 0 : n;
+    };
+
+    if (!Array.isArray(stockLevels) || stockLevels.length === 0) {
+        $stockTableBody.append(`<tr><td colspan="2" class="text-center text-muted p-3">${__("This item is not available in any warehouse.")}</td></tr>`);
+        return;
+    }
+
+    // ادرج الصفوف وحسب المجموع
+    let total = 0;
+    stockLevels.forEach(stock => {
+        const qty = toNumber(stock.actual_qty);
+        total += qty;
+
+        // عرض رقم الكمية كما هو (أو استخدم format_currency لو تحب صِيغة العملة)
+        const qty_display = format_currency(qty, frappe.defaults.get_default("currency"), 2);
+        $stockTableBody.append(`<tr><td>${stock.warehouse}</td><td class="text-right"><strong>${qty_display}</strong></td></tr>`);
+    });
+
+    // صف المجموع النهائي
+    const total_display = format_currency(total, frappe.defaults.get_default("currency"), 2);
+    $stockTableBody.append(`
+        <tr class="table-active">
+            <td><strong>${__("Total")}</strong></td>
+            <td class="text-right"><strong>${total_display}</strong></td>
+        </tr>
+    `);
+}
