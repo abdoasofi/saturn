@@ -1,5 +1,11 @@
 import frappe
-from frappe.utils import add_days, cint, flt, nowdate
+import qrcode
+import base64
+import io
+from frappe import _
+# from frappe.utils.pdf import get_pdf
+from frappe.utils import add_days, cint, flt, nowdate, today
+from frappe.core.doctype.communication.email import make
 
 from erpnext.accounts.doctype.loyalty_program.loyalty_program import get_loyalty_program_details_with_points, validate_loyalty_points
 from erpnext.accounts.doctype.loyalty_point_entry.loyalty_point_entry import get_loyalty_point_entries, get_redemption_details
@@ -191,3 +197,51 @@ def generate_card_number_for_customer(customer_name):
     customer.save(ignore_permissions=True)
     
     return new_card_number
+
+@frappe.whitelist()
+def send_loyalty_card_email(customer_name, loyalty_email):
+    customer = frappe.get_doc("Customer", customer_name)
+    card_number = customer.custom_loyalty_card_number or generate_card_number_for_customer(customer_name)
+    if not card_number: 
+        customer.reload()
+        card_number = customer.custom_loyalty_card_number
+
+    if not loyalty_email or not frappe.utils.validate_email_address(loyalty_email):
+        frappe.throw(_("Please provide a valid email address."))
+
+    # Generate QR image and Base64 data URL
+    img_buffer = io.BytesIO()
+    qrcode.make(card_number).save(img_buffer, format="PNG")
+    qr_image_base64 = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
+    qr_image_data_url = f"data:image/png;base64,{qr_image_base64}"
+
+    # Prepare context
+    company_name = frappe.defaults.get_global_default("company")
+    company_doc = frappe.get_doc("Company", company_name)
+    context = {
+        'customer_name': customer.customer_name,
+        'card_number': card_number,
+        'company_name': company_doc.name,
+        'company_logo': company_doc.company_logo,
+        'current_year': today()[0:4],
+        'qr_image_url': qr_image_data_url
+    }
+
+    # Render template
+    subject = _("Your Digital Loyalty Card from {0}").format(company_name)
+    message_html = frappe.render_template("templates/emails/loyalty_card.html", context)
+
+    # --- THIS IS THE FINAL, ROBUST SOLUTION ---
+    # We use frappe.core.doctype.communication.email.make to build the email
+    # This gives us more control and avoids auto-formatting issues.
+    email_content = make(
+        recipients=[loyalty_email],
+        subject=subject,
+        content=message_html,
+        send_email=True  # This will send it immediately
+    )
+    
+    # The 'make' function returns a Communication doc, but we don't need to do anything with it.
+    # It handles queuing and sending.
+
+    return _("Loyalty card has been sent successfully to {0}").format(loyalty_email)
