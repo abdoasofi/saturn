@@ -45,7 +45,9 @@ app_license = "mit"
 # include js in doctype views
 doctype_js = {
     "Customer" : "public/js/customer.js",
-    "Sales Order" : "public/js/sales_order.js"
+    "Sales Order" : "public/js/sales_order.js",
+    "Material Request" : "public/js/material_request.js",
+    "Stock Entry" : "public/js/stock_entry.js",
     }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -145,6 +147,9 @@ doc_events = {
         "validate": "saturn.loyalty_program_extension.so_before_validate",
         "on_submit": "saturn.loyalty_program_extension.so_on_submit",
         "on_cancel": "saturn.loyalty_program_extension.so_on_cancel"
+    },
+    "Material Request": {
+        "on_submit": "saturn.api.create_se_from_material_request",
     }
 }
 
