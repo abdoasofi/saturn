@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:Card-{#####}",
  "creation": "2025-09-11 22:43:58.038540",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -171,10 +172,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-11 22:43:58.038540",
+ "modified": "2025-09-23 20:42:25.228826",
  "modified_by": "Administrator",
  "module": "Saturn",
  "name": "Card",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

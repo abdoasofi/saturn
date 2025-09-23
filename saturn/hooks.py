@@ -254,7 +254,11 @@ fixtures = [
     {
         "doctype": "Print Format",
         "filters": [
-            ["name", "in", ["Custom Material Request Layout"]]
+            ["name", "in", [
+                "Custom Material Request Layout",
+                "Loyalty Card"
+            
+            ]]
         ]
     },
     {
