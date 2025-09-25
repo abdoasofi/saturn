@@ -239,13 +239,14 @@ def get_warehouses_with_stock(item_code, min_qty=0, company=None):
         min_qty = float(min_qty)
     except Exception:
         min_qty = 0
-
-    filters = [["item_code", "=", item_code], ["actual_qty", ">", min_qty]]
+    warehous = ['main warehouse - S','DOBROESTI NOU - S','VICTORIEI - S']
+    filters = [["item_code", "=", item_code], ["warehouse", "in", warehous], ["actual_qty", ">", min_qty]]
     # If you store company on Bin, uncomment:
     # if company:
     #     filters.append(["company", "=", company])
 
     bins = frappe.get_all("Bin", filters=filters, fields=["warehouse"])
+    
     warehouses = sorted({b["warehouse"] for b in bins if b.get("warehouse")})
     print("*"*50,warehouses)
     return warehouses
