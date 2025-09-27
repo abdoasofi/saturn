@@ -15,24 +15,6 @@ frappe.ui.form.on("Card", {
 				frm.events.print_select(frm);
 			});
 			frm.change_custom_button_type(__("Print Cards"), null, "primary");
-
-			// New: Export DOCX button
-			frm.add_custom_button(__("Export DOCX"), function() {
-				frappe.call({
-					method: "saturn.saturn.doctype.card.card.export_labels_docx",
-					args: {
-						card_name: frm.doc.name
-					},
-					callback: function(r) {
-						if (r.message && r.message.url) {
-							// open the generated file in a new tab (download)
-							window.open(r.message.url, "_blank");
-						} else {
-							frappe.msgprint(__("No file returned from server."));
-						}
-					}
-				});
-			}).addClass("btn-primary");
 		}
 	},
 print_select: function(frm){
@@ -157,8 +139,9 @@ print_select: function(frm){
                         },
                         callback: function(res){
                             if (res.message && res.message.url){
+                                // أفضل أن نستخدم location.href حتى يفتح في نفس التبويب
                                 window.open(res.message.url, "_blank");
-                                // يمكنك إغلاق الديالوج لو رغبت:
+                                // لو تريد تغلق الديالوج:
                                 // frm.selector.dialog.hide();
                             } else {
                                 frappe.msgprint(__("Export failed or no file returned."));

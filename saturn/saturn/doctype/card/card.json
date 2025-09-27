@@ -9,46 +9,14 @@
   "card_name",
   "column_break_2",
   "doctype_card",
-  "size_section",
-  "fixed_width",
-  "card_width",
-  "cards_per_page",
-  "column_break_3",
-  "fixed_height",
-  "card_height",
   "layout_section",
-  "padding",
   "layout",
-  "border_section",
-  "border",
-  "column_break_15",
-  "border_width",
   "section_break_10",
   "filters",
   "fields",
   "data"
  ],
  "fields": [
-  {
-   "depends_on": "eval:(doc.fixed_width)",
-   "description": "size is in millimeter",
-   "fieldname": "card_width",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Card Width",
-   "mandatory_depends_on": "eval:(doc.fixed_width)",
-   "non_negative": 1
-  },
-  {
-   "depends_on": "eval:(doc.fixed_height)",
-   "description": "size is in millimeter",
-   "fieldname": "card_height",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Card Height",
-   "mandatory_depends_on": "eval:(doc.fixed_height)",
-   "non_negative": 1
-  },
   {
    "fieldname": "layout_section",
    "fieldtype": "Section Break",
@@ -58,25 +26,17 @@
    "description": "{{ doc }} represent this document.\n{{ doc_card }} represent each selected document.",
    "fieldname": "layout",
    "fieldtype": "Code",
+   "in_list_view": 1,
    "label": "Layout",
-   "options": "HTML",
    "reqd": 1
-  },
-  {
-   "fieldname": "column_break_3",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "card_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Card Name",
    "reqd": 1,
    "set_only_once": 1
-  },
-  {
-   "fieldname": "size_section",
-   "fieldtype": "Section Break",
-   "label": "Size"
   },
   {
    "fieldname": "section_break_10",
@@ -93,6 +53,7 @@
   {
    "fieldname": "doctype_card",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "DocType",
    "options": "DocType",
    "reqd": 1,
@@ -109,60 +70,6 @@
    "print_hide": 1
   },
   {
-   "default": "1",
-   "fieldname": "fixed_width",
-   "fieldtype": "Check",
-   "label": "Fixed Width"
-  },
-  {
-   "default": "2",
-   "depends_on": "eval:(! doc.fixed_width)",
-   "fieldname": "cards_per_page",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Cards Per Page",
-   "mandatory_depends_on": "eval:(! doc.fixed_width)",
-   "options": "1\n2\n3\n4\n6\n12"
-  },
-  {
-   "default": "1",
-   "fieldname": "fixed_height",
-   "fieldtype": "Check",
-   "label": "Fixed Height"
-  },
-  {
-   "fieldname": "border_section",
-   "fieldtype": "Section Break",
-   "label": "Border"
-  },
-  {
-   "default": "solid",
-   "fieldname": "border",
-   "fieldtype": "Select",
-   "label": "Border",
-   "options": "none\nsolid\ndashed\ndotted"
-  },
-  {
-   "default": "medium",
-   "depends_on": "eval:(doc.border != \"none\")",
-   "fieldname": "border_width",
-   "fieldtype": "Select",
-   "label": "Border Width",
-   "non_negative": 1,
-   "options": "thin\nmedium\nthick"
-  },
-  {
-   "fieldname": "column_break_15",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "1",
-   "description": "padding in millimeter",
-   "fieldname": "padding",
-   "fieldtype": "Float",
-   "label": "padding"
-  },
-  {
    "fieldname": "data",
    "fieldtype": "Long Text",
    "hidden": 1,
@@ -172,7 +79,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-23 20:42:25.228826",
+ "modified": "2025-09-27 21:35:08.912457",
  "modified_by": "Administrator",
  "module": "Saturn",
  "name": "Card",
