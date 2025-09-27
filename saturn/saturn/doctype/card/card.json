@@ -7,8 +7,10 @@
  "engine": "InnoDB",
  "field_order": [
   "card_name",
+  "label_width",
   "column_break_2",
   "doctype_card",
+  "label_height",
   "layout_section",
   "layout",
   "section_break_10",
@@ -28,6 +30,7 @@
    "fieldtype": "Code",
    "in_list_view": 1,
    "label": "Layout",
+   "options": "HTML",
    "reqd": 1
   },
   {
@@ -74,12 +77,26 @@
    "fieldtype": "Long Text",
    "hidden": 1,
    "label": "Data"
+  },
+  {
+   "default": "3",
+   "description": "The width of the label in inches.",
+   "fieldname": "label_width",
+   "fieldtype": "Float",
+   "label": "Label Width"
+  },
+  {
+   "default": "3",
+   "description": "The height of the label in inches.",
+   "fieldname": "label_height",
+   "fieldtype": "Float",
+   "label": "Label Height"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-27 21:35:08.912457",
+ "modified": "2025-09-27 22:15:34.859805",
  "modified_by": "Administrator",
  "module": "Saturn",
  "name": "Card",
