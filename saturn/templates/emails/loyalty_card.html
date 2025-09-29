@@ -1,105 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Loyalty Card</title>
-        <style>
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f4f4f7;
-            }
-            .email-container {
-                max-width: 600px;
-                margin: 20px auto;
-                background-color: #ffffff;
-                border: 1px solid #e0e0e0;
-                border-radius: 8px;
-                overflow: hidden;
-            }
-            .email-header {
-                background-color: #4A5568; /* A professional dark grey/blue */
-                padding: 20px;
-                text-align: center;
-            }
-            .email-header img {
-                max-width: 150px;
-                max-height: 50px;
-            }
-            .email-body {
-                padding: 30px;
-                line-height: 1.6;
-                color: #333333;
-            }
-            .email-body h1 {
-                font-size: 22px;
-                color: #2D3748;
-            }
-            .card-section {
-                margin: 30px 0;
-                padding: 20px;
-                text-align: center;
-                border: 1px dashed #cccccc;
-                border-radius: 8px;
-                background-color: #fafafa;
-            }
-            .card-section .label {
-                font-size: 14px;
-                color: #718096;
-                margin: 0;
-            }
-            .card-section .card-number {
-                font-family: 'Courier New', Courier, monospace;
-                font-size: 24px;
-                font-weight: bold;
-                color: #2D3748;
-                letter-spacing: 2px;
-                margin: 5px 0 20px 0;
-            }
-            .card-section img {
-                max-width: 180px;
-                margin-top: 10px;
-                border: 5px solid #fff;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            }
-            .email-footer {
-                padding: 20px;
-                text-align: center;
-                font-size: 12px;
-                color: #A0AEC0;
-                background-color: #EDF2F7;
-            }
-        </style>
+    <title>Cardul Dvs. de Loialitate</title>
+    <style>
+        /* Paste the Base64 @font-face code for "Great Vibes" here */
+        @font-face {
+          font-family: 'Great Vibes';
+          font-style: normal;
+          font-weight: 400;
+          src: url(data:application/font-woff2;base64,d09GMgABAAAAAAbEABIAAA...) format('woff2'); /* Replace with your full code */
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f7;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            color: #ffffff;
+        }
+        .email-header {
+            padding: 30px;
+            text-align: center;
+        }
+        .company-name-decorative {
+            font-family: 'Great Vibes', cursive;
+            font-size: 42px;
+            color: #FACC15;
+            margin: 0;
+        }
+        .email-body {
+            padding: 0 30px 30px;
+            line-height: 1.6;
+        }
+        .email-body h1 {
+            font-size: 22px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .email-body p {
+            font-size: 14px;
+            color: #cccccc;
+        }
+        .card-preview {
+            margin: 30px 0;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background-color: #2c2c2c;
+        }
+        .card-preview .label {
+            font-size: 12px;
+            color: #b89b3c;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+        .card-preview .points-balance {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 5px 0 20px 0;
+        }
+        .card-preview .card-number {
+            font-family: "Courier New", monospace;
+            font-size: 20px;
+            font-weight: bold;
+            color: #FACC15;
+            letter-spacing: 2px;
+            margin: 5px 0 20px 0;
+        }
+        .card-preview img {
+            max-width: 150px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .email-footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            background-color: #111111;
+        }
+    </style>
 </head>
 <body>
     <div class="email-container">
         <div class="email-header">
-            <!-- أصبح الآن بسيطاً جداً -->
-            {% if company_logo %}
-                <img src="{{ company_logo }}" alt="{{ company_name }}">
-            {% else %}
-                <h2 style="color: #ffffff;">{{ company_name }}</h2>
-            {% endif %}
+            <h1 class="company-name-decorative">Saturn</h1>
         </div>
         <div class="email-body">
-            <h1>Hello, {{ customer_name }}!</h1>
-            <p>Thank you for being a valued customer. We're excited to present you with your personal digital loyalty card.</p>
+            <h1>Salut, {{ customer_name }}!</h1>
+            <p>
+                Îți mulțumim că ești un client valoros. Cardul tău digital de loialitate este atașat acestui e-mail ca fișier PDF.
+            </p>
+            <p>
+                Poți salva fișierul PDF atașat pe telefon sau îl poți imprima pentru a-l folosi în magazin. Pentru acces rapid, poți scana și codul QR de mai jos, direct din acest e-mail.
+            </p>
             
-            <div class="card-section">
-                <p class="label">Your Card Number:</p>
+            <div class="card-preview">
+                <p class="label">Puncte Disponibile:</p>
+                <p class="points-balance">  0  </p>
+                <p class="label">Numărul Cardului:</p>
                 <p class="card-number">{{ card_number }}</p>
                 
-                <p class="label">Scan the QR code below in-store:</p>
-                <img src="{{ qr_image_url }}" alt="Your Loyalty QR Code">
             </div>
-
-            <p>You can use this card to earn and redeem points on your purchases. We look forward to seeing you again soon!</p>
         </div>
         <div class="email-footer">
-            <!-- بسيط أيضاً -->
-            &copy; {{ current_year }} {{ company_name }}. All rights reserved.
+            &copy; {{ current_year }} Saturn. Toate drepturile rezervate.
         </div>
     </div>
 </body>

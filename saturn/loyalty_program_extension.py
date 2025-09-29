@@ -3,6 +3,8 @@ import qrcode
 import base64
 import io
 from frappe import _
+from frappe.utils.pdf import get_pdf
+
 # from frappe.utils.pdf import get_pdf
 from frappe.utils import add_days, cint, flt, nowdate, today
 from frappe.core.doctype.communication.email import make
@@ -209,16 +211,56 @@ def send_loyalty_card_email(customer_name, loyalty_email):
     if not loyalty_email or not frappe.utils.validate_email_address(loyalty_email):
         frappe.throw(_("Please provide a valid email address."))
 
-    # Generate QR image and Base64 data URL
+    # --- Generate QR Code as Base64 ---
+    # **THIS IS THE CHANGE:** We now control the size precisely.
     img_buffer = io.BytesIO()
-    qrcode.make(card_number).save(img_buffer, format="PNG")
+    
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=12,  # Controls the size of each "pixel". Larger number = larger image.
+        border=1      # Minimal white border around the QR code.
+    )
+    qr.add_data(card_number)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+    
+    img.save(img_buffer, format="PNG")
     qr_image_base64 = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
     qr_image_data_url = f"data:image/png;base64,{qr_image_base64}"
 
-    # Prepare context
+    # --- PDF GENERATION (The Robust Method) ---
+    pdf_content = None
+    pdf_filename = f"Loyalty-Card-{card_number}.pdf"
+    try:
+        # 1. Fetch the Print Format's HTML content directly
+        print_format_html = frappe.db.get_value("Print Format", "Loyalty Card", "html")
+        if not print_format_html:
+            raise ValueError("Print Format 'Loyalty Card' not found or has no HTML content.")
+            
+        # 2. Prepare the context for the Print Format
+        print_context = {
+            "doc": customer,
+            "qr_image_url": qr_image_data_url
+        }
+        
+        # 3. Render the HTML using Frappe's standard Jinja renderer
+        rendered_html_for_pdf = frappe.render_template(print_format_html, print_context)
+        
+        # 4. Convert the rendered HTML to PDF
+        pdf_content = get_pdf(rendered_html_for_pdf, output=None)
+
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Final PDF Generation Failed")
+        frappe.throw(
+            _("Failed to generate PDF. Error details: {0}").format(e),
+            title=_("PDF Generation Failed")
+        )
+
+    # --- EMAIL BODY PREPARATION ---
     company_name = frappe.defaults.get_global_default("company")
     company_doc = frappe.get_doc("Company", company_name)
-    context = {
+    email_context = {
         'customer_name': customer.customer_name,
         'card_number': card_number,
         'company_name': company_doc.name,
@@ -226,22 +268,22 @@ def send_loyalty_card_email(customer_name, loyalty_email):
         'current_year': today()[0:4],
         'qr_image_url': qr_image_data_url
     }
-
-    # Render template
+    
     subject = _("Your Digital Loyalty Card from {0}").format(company_name)
-    message_html = frappe.render_template("templates/emails/loyalty_card.html", context)
-
-    # --- THIS IS THE FINAL, ROBUST SOLUTION ---
-    # We use frappe.core.doctype.communication.email.make to build the email
-    # This gives us more control and avoids auto-formatting issues.
-    email_content = make(
+    # Using the template for emails with PDF attachments
+    message_html = frappe.render_template("templates/emails/loyalty_card.html", email_context)
+    
+    # --- SEND EMAIL ---
+    frappe.sendmail(
         recipients=[loyalty_email],
         subject=subject,
-        content=message_html,
-        send_email=True  # This will send it immediately
+        message=message_html,
+        attachments=[
+            {
+                'fname': pdf_filename,
+                'fcontent': pdf_content
+            }
+        ]
     )
     
-    # The 'make' function returns a Communication doc, but we don't need to do anything with it.
-    # It handles queuing and sending.
-
-    return _("Loyalty card has been sent successfully to {0}").format(loyalty_email)
+    return _("Loyalty card PDF has been sent successfully to {0}").format(loyalty_email)
