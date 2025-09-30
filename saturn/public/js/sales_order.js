@@ -1,9 +1,14 @@
 frappe.ui.form.on('Sales Order', {
     onload(frm) {
-        set_user_naming_series(frm);
+        if (frm.is_new()) {
+            set_user_naming_series(frm);
+        }
+        
     },
     refresh(frm) {
-        set_user_naming_series(frm);
+        if (frm.is_new()) {
+            set_user_naming_series(frm);
+        }
     },    
     setup: function(frm) {
         frm.loyalty_details = {};
