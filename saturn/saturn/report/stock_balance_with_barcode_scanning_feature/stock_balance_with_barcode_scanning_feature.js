@@ -115,8 +115,6 @@ frappe.query_reports["Stock Balance With Barcode Scanning Feature"] = {
             width: "80",
             nchange: function() {
                 let barcode_value = frappe.query_report.get_filter_value("barcode");
-                console.log("Barcode entered:", barcode_value); // DEBUG
-
                 if (barcode_value) {
                     frappe.db.get_value("Item Barcode", { barcode: barcode_value }, "parent").then(r => {
                         if (r && r.parent) {
@@ -164,10 +162,8 @@ frappe.query_reports["Stock Balance With Barcode Scanning Feature"] = {
     // إضافة وظيفة rendered
     onload: function(query_report) {
         setTimeout(() => {
-            // 1. تسجيل معلومات الحقول في وحدة التحكم
-            console.log("Fields Dictionary:", query_report.page.fields_dict);
 
-            // 2. التحقق من وجود الحقل قبل محاولة تفعيله
+            //  التحقق من وجود الحقل قبل محاولة تفعيله
             if (query_report.page.fields_dict && query_report.page.fields_dict["barcode"]) {
                 // 3. محاولة تفعيل الحقل باستخدام jQuery
                 try {

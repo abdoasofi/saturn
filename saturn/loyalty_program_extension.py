@@ -50,8 +50,6 @@ def so_on_submit(doc, method):
 def so_on_cancel(doc, method):
     revoke_points_on_so_cancel(doc)
 
-
-
 # --- منطق منح النقاط ---
 def grant_points_on_so_submit(doc):
     if not doc.loyalty_program or doc.grand_total <= 0:
@@ -127,28 +125,40 @@ def revoke_points_on_so_cancel(doc):
     # البحث عن كل سجلات النقاط (اكتساب أو استبدال) المرتبطة بأمر المبيعات هذا
     linked_entries = frappe.get_all("Loyalty Point Entry", filters={"invoice": doc.name, "invoice_type": "Sales Order", "docstatus": 1})
     
+    if not linked_entries:
+        return
+
     for entry in linked_entries:
         try:
             lpe_doc = frappe.get_doc("Loyalty Point Entry", entry.name)
-            lpe_doc.cancel() # نقوم بإلغاء السجل بدلاً من حذفه
+            lpe_doc.cancel()
             frappe.msgprint(f"Cancelled Loyalty Point Entry: {entry.name}")
         except Exception as e:
             frappe.log_error(frappe.get_traceback(), f"Failed to cancel LPE {entry.name}")
     
-    set_customer_tier(doc.customer, doc.loyalty_program, doc.company)
+    # We only update the tier if the customer is still in a program
+    if doc.customer and doc.loyalty_program:
+        set_customer_tier(doc.customer, doc.loyalty_program, doc.company)
 
 
-# --- Helper Function to update customer tier ---
+# --- Helper Function to update customer tier (Corrected) ---
 def set_customer_tier(customer, loyalty_program, company):
-    # هذه الدالة تحاكي ما تفعله دالة set_loyalty_program_tier في Sales Invoice
-    lp_details = get_loyalty_program_details_with_points(
-        customer,
-        loyalty_program=loyalty_program,
-        company=company,
-        include_expired_entry=True
-    )
-    if lp_details and lp_details.get("tier_name"):
-        frappe.db.set_value("Customer", customer, "loyalty_program_tier", lp_details.get("tier_name"))
+    # **THIS IS THE FIX**
+    # Make a silent call to prevent throwing an error if the program is not found.
+    try:
+        lp_details = get_loyalty_program_details_with_points(
+            customer,
+            loyalty_program=loyalty_program,
+            company=company,
+            include_expired_entry=True,
+            silent=True # This will return None instead of throwing an error
+        )
+        # Proceed only if details are found
+        if lp_details and lp_details.get("tier_name"):
+            frappe.db.set_value("Customer", customer, "loyalty_program_tier", lp_details.get("tier_name"))
+    except Exception as e:
+        # Log the error but don't stop the cancellation process
+        frappe.log_error(f"Could not update tier for customer {customer}: {e}", "Tier Update Failed")
 
 @frappe.whitelist()
 def generate_card_number_for_customer(customer_name):
@@ -172,16 +182,13 @@ def generate_card_number_for_customer(customer_name):
         fieldname="custom_loyalty_card_number",
         # order_by="creation DESC"
     )
-    print("*"*50,last_card_number)
     
     # 3. استخراج الرقم وزيادته
     if last_card_number:
         try:
             # حاول استخراج الجزء الرقمي من آخر رقم
             last_number = int(last_card_number.replace(prefix, ""))
-            print("*-"*50,last_number)
             new_number = last_number + 1
-            print("*/"*50,new_number)
         except ValueError:
             # في حال كان الرقم القديم غير صالح، ابدأ من 1
             new_number = 1
@@ -192,7 +199,6 @@ def generate_card_number_for_customer(customer_name):
     # 4. تنسيق الرقم الجديد (5 خانات مع أصفار بادئة)
     # مثلاً: 1 -> 00001, 123 -> 00123
     new_card_number = f"{prefix}{new_number:05d}"
-    print("*#"*50,new_card_number)
     
     # 5. احفظ الرقم الجديد في حقل العميل
     customer.custom_loyalty_card_number = new_card_number

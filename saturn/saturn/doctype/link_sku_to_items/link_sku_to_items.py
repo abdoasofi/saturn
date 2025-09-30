@@ -34,7 +34,6 @@ class LinkSKUToItems(Document):
 			filters={"sku": sku},
 			fields=["name", "quantity_sku"]
 		)
-		print("*-"*50,items)
 		# Format the data for the child table
 		# The 'name' field is the item_code
 		formatted_items = []

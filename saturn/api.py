@@ -248,5 +248,4 @@ def get_warehouses_with_stock(item_code, min_qty=0, company=None):
     bins = frappe.get_all("Bin", filters=filters, fields=["warehouse"])
     
     warehouses = sorted({b["warehouse"] for b in bins if b.get("warehouse")})
-    print("*"*50,warehouses)
     return warehouses
