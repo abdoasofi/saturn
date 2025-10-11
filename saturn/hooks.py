@@ -256,7 +256,8 @@ fixtures = [
         "filters": [
             ["name", "in", [
                 "Custom Material Request Layout",
-                "Loyalty Card"
+                "Loyalty Card",
+                "Custom POS Invoice"
             
             ]]
         ]
