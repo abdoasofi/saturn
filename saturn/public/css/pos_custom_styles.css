@@ -1,0 +1,91 @@
+
+/* /apps/saturn/saturn/public/css/pos_custom_styles.css  */
+
+/* 1. تحديد حجم حاوية الصورة في CSS */
+.items-selector .item-wrapper .item-image-container {
+    height: 9rem !important;      /* ارتفاع الصورة، يمكنك تعديله (مثلاً 8rem أو 9rem) */
+    min-height: 9rem !important;  /* تأكد من أن الارتفاع الأدنى هو نفسه */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-color); /* إضافة حد سفلي خفيف للفصل */
+    margin-bottom: var(--margin-xs); /* هامش سفلي يفصل الصورة عن اسم الصنف */
+    background-color: var(--extra-light-grey); /* خلفية خفيفة لحاوية الصورة */
+    order: 1; /* **MODIFICATION:** Ensure image is always first in flex order */
+}
+
+/* 2. ضمان أن الصورة نفسها تملأ الحاوية بشكل صحيح */
+.items-selector .item-wrapper .item-img {
+    object-fit: contain !important; /* يحافظ على نسبة العرض إلى الارتفاع */
+    height: 100% !important;
+    width: 100% !important;
+}
+
+/* 3. الإعدادات الأساسية لـ item-wrapper (البطاقة الكلية) */
+.items-selector .items-container {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.items-selector .item-wrapper {
+    /* **MODIFICATION:** INCREASE min-height for the entire card significantly. */
+    min-height: 320px !important; /* زيادة الارتفاع الكلي لبطاقة الصنف (مثلاً 300px -> 320px) */
+    height: auto !important; /* لضمان مرونة الارتفاع */
+    padding: var(--padding-sm); /* هامش داخلي للبطاقة */
+    display: flex; /* استخدام flexbox */
+    flex-direction: column; /* ترتيب العناصر عمودياً */
+    justify-content: flex-start; /* تبدأ العناصر من الأعلى */
+    align-items: stretch; /* تمتد العناصر عرضياً */
+    gap: var(--margin-xs); /* **NEW:** إضافة مسافة بين العناصر داخل الـ flex container */
+}
+
+/* 4. تعديل تنسيق اسم الصنف لضمان ظهوره بشكل كامل وأنيق */
+.items-selector .item-wrapper .item-name {
+    /* **MODIFICATION:** Allow more lines (e.g., 3 or 4) for item-name. */
+    font-size: var(--text-base); 
+    font-weight: bold; 
+    white-space: normal !important; 
+    overflow: hidden !important; 
+    text-overflow: ellipsis !important; 
+    /* **NEW/MODIFIED:** استخدام line-clamp لقص النص بشكل أنيق لعدة أسطر */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* عدد الأسطر المسموح بها */
+    -webkit-box-orient: vertical;
+    
+    min-height: calc(var(--text-base) * 1.2 * 5) !important; /* حساب الارتفاع الأدنى لـ 3 أسطر */
+    max-height: calc(var(--text-base) * 1.2 * 5) !important; /* حساب الارتفاع الأقصى لـ 3 أسطر */
+    line-height: 1.2; /* ضبط ارتفاع السطر ليتناسب مع الخط */
+    margin: 0; /* إزالة الهوامش الزائدة */
+    padding: 0; 
+    order: 2; /* **MODIFICATION:** Ensure item name is second in flex order */
+}
+
+/* 5. تعديل تنسيق السعر */
+.items-selector .item-wrapper .item-rate {
+    font-size: var(--text-sm); 
+    color: var(--text-muted); 
+    padding-top: var(--padding-xs); /* هامش علوي يفصل السعر عن اسم الصنف */
+    flex-grow: 1; /* للسماح للسعر بأخذ أي مساحة إضافية متاحة */
+    order: 3; /* **MODIFICATION:** Ensure item rate is third in flex order */
+}
+
+/* 6. تحسينات إضافية على item-detail container */
+.items-selector .item-wrapper .item-detail {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* السماح له بالنمو لملء المساحة المتبقية */
+    order: 2; /* **MODIFICATION:** Ensure item-detail is part of the flow */
+    /* قد تحتاج لتعديل Order هنا إذا كان هذا الـ div يحتوي كل من اسم الصنف والسعر */
+    /* إذا كان item-detail يلف item-name و item-rate، فاجعل item-name و item-rate لهما order: 1 و order: 2 داخل item-detail */
+}
+
+
+/* 7. ضبط مكان حبة الكمية (item-qty-pill) */
+.items-selector .item-wrapper .item-qty-pill {
+    position: absolute; 
+    top: var(--padding-sm); /* ضبط top ليتناسب مع padding البطاقة */
+    right: var(--padding-sm); /* ضبط right ليتناسب مع padding البطاقة */
+    z-index: 10; /* لضمان ظهورها فوق أي شيء آخر */
+    order: 0; /* **MODIFICATION:** Ensure qty pill is always on top layer visually */
+}

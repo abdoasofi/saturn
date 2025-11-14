@@ -25,8 +25,10 @@ app_license = "mit"
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/saturn/css/saturn.css"
-# app_include_js = "/assets/saturn/js/saturn.js"
+app_include_css = [
+    "/assets/saturn/css/pos_custom_styles.css"
+]
+app_include_js = "assets/saturn/js/pos_override_controller.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/saturn/css/saturn.css"
@@ -40,8 +42,14 @@ app_license = "mit"
 # webform_include_css = {"doctype": "public/css/doctype.css"}
 
 # include js in page
-# page_js = {"page" : "public/js/file.js"}
-
+# page_js = {
+#     "point_of_sale": "assets/saturn/js/pos_item_selector_custom.js"
+# }
+# page_include_js = {
+#     "point-of-sale": [
+#         "assets/saturn/js/pos_override_controller.js"
+#     ]
+# }
 # include js in doctype views
 doctype_js = {
     "Customer" : "public/js/customer.js",
