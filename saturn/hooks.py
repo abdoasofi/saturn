@@ -27,8 +27,11 @@ app_license = "mit"
 # include js, css files in header of desk.html
 app_include_css = [
     "/assets/saturn/css/pos_custom_styles.css"
-]
-app_include_js = "assets/saturn/js/pos_override_controller.js"
+    ]
+app_include_js = [
+    "assets/saturn/js/pos_override_controller.js",
+    "assets/saturn/js/pos_cart_override.js"
+    ]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/saturn/css/saturn.css"
@@ -158,7 +161,11 @@ doc_events = {
     },
     "Material Request": {
         "on_submit": "saturn.api.create_se_from_material_request",
-    }
+    },
+    "POS Invoice": {
+        "validate": "saturn.saturn.overrides.pos_invoice_handlers.remove_taxes_if_not_applied",
+        "before_submit": "saturn.saturn.overrides.pos_invoice_handlers.remove_taxes_if_not_applied"
+    }    
 }
 
 # Scheduled Tasks
