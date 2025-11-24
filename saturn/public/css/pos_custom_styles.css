@@ -1,91 +1,473 @@
-
 /* /apps/saturn/saturn/public/css/pos_custom_styles.css  */
 
-/* 1. تحديد حجم حاوية الصورة في CSS */
+/* ========================================================================== */
+/* التنسيقات الحالية لبطاقات الأصناف */
+/* ========================================================================== */
+
 .items-selector .item-wrapper .item-image-container {
-    height: 9rem !important;      /* ارتفاع الصورة، يمكنك تعديله (مثلاً 8rem أو 9rem) */
-    min-height: 9rem !important;  /* تأكد من أن الارتفاع الأدنى هو نفسه */
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    border-bottom: 1px solid var(--border-color); /* إضافة حد سفلي خفيف للفصل */
-    margin-bottom: var(--margin-xs); /* هامش سفلي يفصل الصورة عن اسم الصنف */
-    background-color: var(--extra-light-grey); /* خلفية خفيفة لحاوية الصورة */
-    order: 1; /* **MODIFICATION:** Ensure image is always first in flex order */
+    height: 9rem !important;
+    min-height: 9rem !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    overflow: hidden !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    margin-bottom: var(--margin-xs) !important;
+    background-color: var(--extra-light-grey) !important;
+    order: 1 !important;
 }
 
-/* 2. ضمان أن الصورة نفسها تملأ الحاوية بشكل صحيح */
 .items-selector .item-wrapper .item-img {
-    object-fit: contain !important; /* يحافظ على نسبة العرض إلى الارتفاع */
+    object-fit: contain !important;
     height: 100% !important;
     width: 100% !important;
 }
 
-/* 3. الإعدادات الأساسية لـ item-wrapper (البطاقة الكلية) */
 .items-selector .items-container {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 }
 
 .items-selector .item-wrapper {
-    /* **MODIFICATION:** INCREASE min-height for the entire card significantly. */
-    min-height: 320px !important; /* زيادة الارتفاع الكلي لبطاقة الصنف (مثلاً 300px -> 320px) */
-    height: auto !important; /* لضمان مرونة الارتفاع */
-    padding: var(--padding-sm); /* هامش داخلي للبطاقة */
-    display: flex; /* استخدام flexbox */
-    flex-direction: column; /* ترتيب العناصر عمودياً */
-    justify-content: flex-start; /* تبدأ العناصر من الأعلى */
-    align-items: stretch; /* تمتد العناصر عرضياً */
-    gap: var(--margin-xs); /* **NEW:** إضافة مسافة بين العناصر داخل الـ flex container */
+    min-height: 320px !important;
+    height: auto !important;
+    padding: var(--padding-sm) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+    gap: var(--margin-xs) !important;
 }
 
-/* 4. تعديل تنسيق اسم الصنف لضمان ظهوره بشكل كامل وأنيق */
 .items-selector .item-wrapper .item-name {
-    /* **MODIFICATION:** Allow more lines (e.g., 3 or 4) for item-name. */
-    font-size: var(--text-base); 
-    font-weight: bold; 
-    white-space: normal !important; 
-    overflow: hidden !important; 
-    text-overflow: ellipsis !important; 
-    /* **NEW/MODIFIED:** استخدام line-clamp لقص النص بشكل أنيق لعدة أسطر */
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* عدد الأسطر المسموح بها */
-    -webkit-box-orient: vertical;
-    
-    min-height: calc(var(--text-base) * 1.2 * 5) !important; /* حساب الارتفاع الأدنى لـ 3 أسطر */
-    max-height: calc(var(--text-base) * 1.2 * 5) !important; /* حساب الارتفاع الأقصى لـ 3 أسطر */
-    line-height: 1.2; /* ضبط ارتفاع السطر ليتناسب مع الخط */
-    margin: 0; /* إزالة الهوامش الزائدة */
-    padding: 0; 
-    order: 2; /* **MODIFICATION:** Ensure item name is second in flex order */
+    font-size: var(--text-base) !important;
+    font-weight: bold !important;
+    white-space: normal !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+    min-height: calc(var(--text-base) * 1.2 * 5) !important;
+    max-height: calc(var(--text-base) * 1.2 * 5) !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    order: 2 !important;
 }
 
-/* 5. تعديل تنسيق السعر */
 .items-selector .item-wrapper .item-rate {
-    font-size: var(--text-sm); 
-    color: var(--text-muted); 
-    padding-top: var(--padding-xs); /* هامش علوي يفصل السعر عن اسم الصنف */
-    flex-grow: 1; /* للسماح للسعر بأخذ أي مساحة إضافية متاحة */
-    order: 3; /* **MODIFICATION:** Ensure item rate is third in flex order */
+    font-size: var(--text-sm) !important;
+    color: var(--text-muted) !important;
+    padding-top: var(--padding-xs) !important;
+    flex-grow: 1 !important;
+    order: 3 !important;
 }
 
-/* 6. تحسينات إضافية على item-detail container */
 .items-selector .item-wrapper .item-detail {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; /* السماح له بالنمو لملء المساحة المتبقية */
-    order: 2; /* **MODIFICATION:** Ensure item-detail is part of the flow */
-    /* قد تحتاج لتعديل Order هنا إذا كان هذا الـ div يحتوي كل من اسم الصنف والسعر */
-    /* إذا كان item-detail يلف item-name و item-rate، فاجعل item-name و item-rate لهما order: 1 و order: 2 داخل item-detail */
+    display: flex !important;
+    flex-direction: column !important;
+    flex-grow: 1 !important;
+    order: 2 !important;
 }
 
-
-/* 7. ضبط مكان حبة الكمية (item-qty-pill) */
 .items-selector .item-wrapper .item-qty-pill {
-    position: absolute; 
-    top: var(--padding-sm); /* ضبط top ليتناسب مع padding البطاقة */
-    right: var(--padding-sm); /* ضبط right ليتناسب مع padding البطاقة */
-    z-index: 10; /* لضمان ظهورها فوق أي شيء آخر */
-    order: 0; /* **MODIFICATION:** Ensure qty pill is always on top layer visually */
+    position: absolute !important;
+    top: var(--padding-sm) !important;
+    right: var(--padding-sm) !important;
+    z-index: 10 !important;
+    order: 0 !important;
+}
+
+/* ========================================================================== */
+/* تنسيقات Apply Tax - تصميم احترافي ومتناسق */
+/* ========================================================================== */
+
+/* الحاوية الرئيسية لـ Apply Tax */
+.tax-toggle-container {
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    margin: 12px 0 !important;
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.tax-toggle-container:hover {
+    border-color: #bdbdbd !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+    transform: translateY(-2px) !important;
+}
+
+.tax-toggle-container.active {
+    border-color: #4caf50 !important;
+    background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%) !important;
+    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.15) !important;
+}
+
+/* التسمية */
+.tax-toggle-container label {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    color: #424242 !important;
+    transition: color 0.3s ease !important;
+}
+
+.tax-toggle-container:hover label {
+    color: #212121 !important;
+}
+
+.tax-toggle-container.active label {
+    color: #2e7d32 !important;
+}
+
+/* تصميم Toggle Switch احترافي */
+.tax-toggle-container .toggle-tax {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    width: 52px !important;
+    height: 28px !important;
+    background: #bdbdbd !important;
+    border-radius: 24px !important;
+    position: relative !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    border: 2px solid transparent !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+.tax-toggle-container .toggle-tax:checked {
+    background: #4caf50 !important;
+    border-color: #388e3c !important;
+}
+
+.tax-toggle-container .toggle-tax::before {
+    content: '' !important;
+    position: absolute !important;
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+    background: white !important;
+    top: 2px !important;
+    left: 2px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.tax-toggle-container .toggle-tax:checked::before {
+    transform: translateX(24px) !important;
+    background: white !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.tax-toggle-container .toggle-tax:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3) !important;
+}
+
+/* تأثير النبض عند التفعيل */
+@keyframes taxTogglePulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+    }
+}
+
+.tax-toggle-container.active.pulse {
+    animation: taxTogglePulse 1s ease-in-out !important;
+}
+
+/* أيقونة الضريبة (اختياري) */
+.tax-toggle-container::before {
+    content: '💰' !important;
+    position: absolute !important;
+    top: 12px !important;
+    left: 16px !important;
+    font-size: 18px !important;
+    opacity: 0.7 !important;
+    transition: all 0.3s ease !important;
+}
+
+.tax-toggle-container.active::before {
+    content: '💸' !important;
+    opacity: 1 !important;
+    transform: scale(1.1) !important;
+}
+
+/* النص */
+.apply-tax-label {
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    margin-left: 30px !important;
+    transition: all 0.3s ease !important;
+}
+
+/* ========================================================================== */
+/* تنسيقات زر Fixed Amount Discount - متزامنة مع Apply Tax */
+/* ========================================================================== */
+
+/* الزر الأساسي */
+.add-fixed-discount-wrapper {
+    border: 2px dashed #1e88e5 !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    margin: 12px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%) !important;
+    color: #1e88e5 !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    font-family: inherit !important;
+    min-height: 54px !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 8px rgba(30, 136, 229, 0.1) !important;
+}
+
+/* تأثير hover */
+.add-fixed-discount-wrapper:hover {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%) !important;
+    border-color: #1565c0 !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(30, 136, 229, 0.2) !important;
+    color: #0d47a1 !important;
+}
+
+/* عندما يكون الخصم مطبقاً */
+.add-fixed-discount-wrapper.discount-active,
+.add-fixed-discount-wrapper[style*="dark-green-500"],
+.add-fixed-discount-wrapper[style*="green"] {
+    border: 2px solid #4caf50 !important;
+    background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%) !important;
+    color: #2e7d32 !important;
+    box-shadow: 0 2px 10px rgba(76, 175, 80, 0.15) !important;
+}
+
+.add-fixed-discount-wrapper.discount-active:hover,
+.add-fixed-discount-wrapper[style*="dark-green-500"]:hover,
+.add-fixed-discount-wrapper[style*="green"]:hover {
+    background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%) !important;
+    border-color: #388e3c !important;
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.25) !important;
+    color: #1b5e20 !important;
+}
+
+/* أيقونة الخصم */
+.add-fixed-discount-wrapper .discount-icon {
+    width: 20px !important;
+    height: 20px !important;
+    stroke: currentColor !important;
+    stroke-width: 2 !important;
+    transition: all 0.3s ease !important;
+    flex-shrink: 0 !important;
+}
+
+.add-fixed-discount-wrapper:hover .discount-icon {
+    transform: scale(1.2) rotate(-5deg) !important;
+}
+
+/* حقل الإدخال */
+.add-fixed-discount-field {
+    width: 100% !important;
+    display: block !important;
+}
+
+.add-fixed-discount-field .control-input {
+    border: 2px solid #64b5f6 !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    background: #ffffff !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    color: #333 !important;
+}
+
+.add-fixed-discount-field .control-input:focus {
+    border-color: #1e88e5 !important;
+    box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.3) !important;
+    outline: none !important;
+    transform: scale(1.02) !important;
+}
+
+/* زر التعديل عندما يكون الخصم مطبقاً */
+.edit-fixed-discount-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    padding: 8px 0 !important;
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+.edit-fixed-discount-btn:hover {
+    opacity: 0.9 !important;
+    transform: translateY(-2px) !important;
+}
+
+/* تأثير النبض عند التطبيق */
+@keyframes discountPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(76, 175, 80, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+    }
+}
+
+.add-fixed-discount-wrapper.discount-applied {
+    animation: discountPulse 1.5s ease-in-out !important;
+}
+
+/* ========================================================================== */
+/* تنسيقات متزامنة للعناصر الأخرى */
+/* ========================================================================== */
+
+/* تحسين تنسيقات العناصر المحيطة */
+.net-total-container,
+.taxes-container,
+.grand-total-container {
+    padding: 12px 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    margin: 8px 0 !important;
+}
+
+.grand-total-container {
+    border-bottom: none !important;
+    border-top: 2px solid #e0e0e0 !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    color: #333 !important;
+}
+
+/* تنسيقات للوضع الليلي */
+.body-dark .tax-toggle-container,
+[data-theme="dark"] .tax-toggle-container,
+.dark .tax-toggle-container {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%) !important;
+    border-color: #4a5568 !important;
+    color: #e2e8f0 !important;
+}
+
+.body-dark .tax-toggle-container label,
+[data-theme="dark"] .tax-toggle-container label,
+.dark .tax-toggle-container label {
+    color: #e2e8f0 !important;
+}
+
+.body-dark .tax-toggle-container.active,
+[data-theme="dark"] .tax-toggle-container.active,
+.dark .tax-toggle-container.active {
+    background: linear-gradient(135deg, #22543d 0%, #2d5a3d 100%) !important;
+    border-color: #48bb78 !important;
+}
+
+.body-dark .add-fixed-discount-wrapper,
+[data-theme="dark"] .add-fixed-discount-wrapper,
+.dark .add-fixed-discount-wrapper {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%) !important;
+    color: #90cdf4 !important;
+    border-color: #4299e1 !important;
+}
+
+.body-dark .add-fixed-discount-wrapper:hover,
+[data-theme="dark"] .add-fixed-discount-wrapper:hover,
+.dark .add-fixed-discount-wrapper:hover {
+    background: linear-gradient(135deg, #4a5568 0%, #718096 100%) !important;
+    border-color: #63b3ed !important;
+    color: #bee3f8 !important;
+}
+
+/* تحسينات للشاشات الصغيرة */
+@media (max-width: 768px) {
+    .tax-toggle-container {
+        padding: 12px !important;
+        margin: 8px 0 !important;
+    }
+    
+    .tax-toggle-container label {
+        font-size: 14px !important;
+    }
+    
+    .tax-toggle-container .toggle-tax {
+        width: 44px !important;
+        height: 24px !important;
+    }
+    
+    .tax-toggle-container .toggle-tax::before {
+        width: 16px !important;
+        height: 16px !important;
+    }
+    
+    .tax-toggle-container .toggle-tax:checked::before {
+        transform: translateX(20px) !important;
+    }
+    
+    .add-fixed-discount-wrapper {
+        padding: 12px !important;
+        font-size: 14px !important;
+        min-height: 48px !important;
+        margin: 8px 0 !important;
+    }
+    
+    .add-fixed-discount-wrapper .discount-icon {
+        width: 18px !important;
+        height: 18px !important;
+    }
+    
+    .add-fixed-discount-field .control-input {
+        padding: 10px !important;
+        font-size: 14px !important;
+    }
+}
+
+/* تأثيرات إضافية للتفاعل */
+.tax-toggle-container .toggle-tax:active {
+    transform: scale(0.95) !important;
+}
+
+.add-fixed-discount-wrapper:active {
+    transform: translateY(-1px) !important;
+}
+
+/* التأكد من أن التنسيقات تطبق بالقوة */
+html body .tax-toggle-container,
+html body .add-fixed-discount-wrapper {
+    border-radius: 12px !important;
+    padding: 16px !important;
+    margin: 12px 0 !important;
 }
