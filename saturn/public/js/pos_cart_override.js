@@ -48,6 +48,7 @@
         // حفظ الحالة الافتراضية
         if (typeof this.apply_taxes === "undefined") this.apply_taxes = true;
         if (typeof this.fixed_discount_amount === "undefined") this.fixed_discount_amount = 0;
+        if (typeof this.original_taxes === "undefined") this.original_taxes = null;
         
         // sync UI
         this.$totals_section.find(".toggle-tax").prop("checked", this.apply_taxes);
@@ -63,35 +64,63 @@
       // Initialize apply_taxes default
       if (typeof this.apply_taxes === "undefined") this.apply_taxes = true;
       if (typeof this.fixed_discount_amount === "undefined") this.fixed_discount_amount = 0;
+      if (typeof this.original_taxes === "undefined") this.original_taxes = null;
 
       // attach handlers first so they run BEFORE original handlers (important for checkout)
       // checkbox change - إصلاح كامل لتأثير Apply Tax
       this.$component.on("change.saturn_tax", ".toggle-tax", function () {
-        me.apply_taxes = $(this).is(":checked");
+        const new_tax_state = $(this).is(":checked");
         const frm = me.events.get_frm();
         
         if (!frm || !frm.doc) return;
         
-        console.log("Apply Tax changed to:", me.apply_taxes, "Current net_total:", frm.doc.net_total);
+        console.log("Apply Tax changed to:", new_tax_state, "Current net_total:", frm.doc.net_total);
+        
+        // تحديث حالة الضريبة
+        me.apply_taxes = new_tax_state;
         
         // تحديث حقل apply_taxes في المستند
         frappe.model.set_value(frm.doc.doctype, frm.doc.name, "apply_taxes", me.apply_taxes ? 1 : 0);
         
         if (me.apply_taxes) {
-          // إذا تم تفعيل الضريبة - إعادة حساب كل شيء مع الضريبة
+          // الحالة 1: تم تفعيل الضريبة
+          console.log("=== ENABLING TAXES ===");
+          
+          if (me.original_taxes && me.original_taxes.length > 0) {
+            // استعادة الضرائب الأصلية
+            console.log("Restoring original taxes:", me.original_taxes);
+            frappe.model.set_value(frm.doc.doctype, frm.doc.name, "taxes", me.original_taxes);
+            me.original_taxes = null;
+          } else {
+            // إذا لم تكن هناك ضرائب محفوظة، نعيد حسابها من جديد
+            console.log("No saved taxes, recalculating from scratch");
+          }
+          
+          // إعادة حساب الضرائب والإجماليات
           frm.trigger("calculate_taxes_and_totals");
-
-          // نعيد تطبيق الخصم بعد حساب الضرائب لضمان أن الضريبة تحسب على المبلغ بعد الخصم
+          
+          // إعادة تطبيق الخصم بعد حساب الضرائب
           if (frm.doc.discount_amount > 0) {
             setTimeout(() => {
+              console.log("Reapplying discount after tax calculation");
               me.apply_fixed_discount(frm.doc.discount_amount, frm, true);
-            }, 500);
+            }, 800);
           }
         } else {
-          // إذا تم إلغاء الضريبة - إزالة الضرائب وحساب يدوي
+          // الحالة 2: تم إلغاء الضريبة
+          console.log("=== DISABLING TAXES ===");
+          
+          // حفظ الضرائب الحالية قبل إزالتها
+          if (frm.doc.taxes && frm.doc.taxes.length > 0) {
+            me.original_taxes = JSON.parse(JSON.stringify(frm.doc.taxes));
+            console.log("Saved original taxes:", me.original_taxes);
+          }
+          
+          // إزالة الضرائب من المستند
           frappe.model.set_value(frm.doc.doctype, frm.doc.name, "taxes", []);
           frappe.model.set_value(frm.doc.doctype, frm.doc.name, "tax_amount", 0);
           frappe.model.set_value(frm.doc.doctype, frm.doc.name, "total_taxes_and_charges", 0);
+          frappe.model.set_value(frm.doc.doctype, frm.doc.name, "taxes_and_charges", "");
           
           // حساب الإجمالي بدون ضريبة
           const net_total = frm.doc.net_total || 0;
@@ -100,13 +129,19 @@
           
           frappe.model.set_value(frm.doc.doctype, frm.doc.name, "grand_total", Math.max(grand_total, 0));
           
+          // تحديث rounded_total إذا كان مستخدمًا
+          if (frm.doc.rounded_total !== undefined) {
+            const rounded_total = cint(frappe.sys_defaults.disable_rounded_total) ? grand_total : Math.round(grand_total);
+            frappe.model.set_value(frm.doc.doctype, frm.doc.name, "rounded_total", rounded_total);
+          }
+          
           console.log("Tax disabled - Net:", net_total, "Discount:", discount_amount, "Grand Total:", grand_total);
         }
         
         // تحديث الواجهة
         setTimeout(() => {
           me.update_totals_section(frm);
-        }, 300);
+        }, 500);
       });
 
       // زر Fixed Amount Discount
@@ -363,6 +398,12 @@
       if (frm && frm.doc) {
         // تعيين apply_taxes في المستند
         frappe.model.set_value(frm.doc.doctype, frm.doc.name, "apply_taxes", this.apply_taxes ? 1 : 0);
+        
+        // حفظ الضرائب الأصلية إذا كانت موجودة
+        if (frm.doc.taxes && frm.doc.taxes.length > 0 && !this.original_taxes) {
+          this.original_taxes = JSON.parse(JSON.stringify(frm.doc.taxes));
+          console.log("Saved original taxes on invoice load:", this.original_taxes);
+        }
         
         setTimeout(() => {
           this.update_totals_section(frm);
