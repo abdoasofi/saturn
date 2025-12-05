@@ -1,20 +1,24 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:PAIR-{MM}-{YYYY}-{#####} ",
  "creation": "2025-11-29 09:05:45.863176",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "section_break_eib0",
-  "from",
+  "from_date",
   "item_group",
-  "amended_from",
+  "check_in_group",
+  "material_request_type",
   "column_break_gqye",
-  "to",
+  "to_date",
   "number_of_days",
+  "request_for",
   "section_break_ogqv",
   "get_items",
-  "automated_item_request_processing_schedule"
+  "automated_item_request_processing_schedule",
+  "amended_from"
  ],
  "fields": [
   {
@@ -32,13 +36,6 @@
    "search_index": 1
   },
   {
-   "fieldname": "from",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "From",
-   "reqd": 1
-  },
-  {
    "fieldname": "item_group",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -51,17 +48,11 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "to",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "To",
-   "reqd": 1
-  },
-  {
    "fieldname": "section_break_ogqv",
    "fieldtype": "Section Break"
   },
   {
+   "allow_bulk_edit": 1,
    "fieldname": "automated_item_request_processing_schedule",
    "fieldtype": "Table",
    "label": "Automated Item Request Processing Schedule",
@@ -76,16 +67,52 @@
    "fieldname": "number_of_days",
    "fieldtype": "Int",
    "label": "Number of Days"
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "From Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "To Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "check_in_group",
+   "fieldtype": "Link",
+   "label": "Check in (group)",
+   "options": "Warehouse",
+   "reqd": 1
+  },
+  {
+   "fieldname": "request_for",
+   "fieldtype": "Link",
+   "label": "Request for",
+   "options": "Warehouse",
+   "reqd": 1
+  },
+  {
+   "default": "Purchase",
+   "fieldname": "material_request_type",
+   "fieldtype": "Select",
+   "label": "Material Request Type",
+   "options": "Purchase\nTransfer\nMaterial Issue\nManufacture"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-11-29 09:29:39.243728",
+ "modified": "2025-11-29 22:06:10.662110",
  "modified_by": "Administrator",
  "module": "saturn",
  "name": "Processing Automatic Item Requests",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
