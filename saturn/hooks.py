@@ -172,7 +172,11 @@ doc_events = {
             "saturn.saturn.overrides.pos_invoice_handlers.apply_additional_discount_amount",
             "saturn.saturn.overrides.pos_invoice_handlers.remove_taxes_if_not_applied"
         ],
-    }   
+    },
+    "Item": {
+        "validate": "saturn.saturn.overrides.item.validate",
+        "before_insert": "saturn.saturn.overrides.item.before_insert"
+    }
 }
 
 # Scheduled Tasks
@@ -204,9 +208,12 @@ doc_events = {
 # Overriding Methods
 # ------------------------------
 #
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "saturn.event.get_events"
-# }
+override_whitelisted_methods = {
+    "erpnext.controllers.item_variant.get_variant": "saturn.saturn.overrides.item_variant.get_variant",
+    "erpnext.controllers.item_variant.create_variant": "saturn.saturn.overrides.item_variant.create_variant",
+    "erpnext.controllers.item_variant.enqueue_multiple_variant_creation": "saturn.saturn.overrides.item_variant.enqueue_multiple_variant_creation",
+    "erpnext.controllers.item_variant.create_variant_doc_for_quick_entry": "saturn.saturn.overrides.item_variant.create_variant_doc_for_quick_entry"
+}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
