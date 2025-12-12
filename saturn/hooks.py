@@ -146,9 +146,9 @@ doctype_js = {
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+    "Item": "saturn.saturn.overrides.item.ItemOverrides"
+}
 
 # Document Events
 # ---------------
@@ -175,7 +175,8 @@ doc_events = {
     },
     "Item": {
         "validate": "saturn.saturn.overrides.item.validate",
-        "before_insert": "saturn.saturn.overrides.item.before_insert"
+        "before_insert": "saturn.saturn.overrides.item.before_insert",
+        "after_insert": "saturn.saturn.overrides.item.after_insert"
     }
 }
 

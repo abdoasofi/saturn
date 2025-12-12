@@ -2,35 +2,75 @@ import frappe
 from frappe import _
 import re
 
+class ItemOverrides(frappe.model.document.Document):
+    def validate_variant_based_on_change(self):
+        """Override original validation to allow creating derived items"""
+        # If the item is new (being created), no need to validate
+        if self.is_new():
+            return
+        
+        # If the item is a variant, don't apply validation
+        if self.variant_of:
+            return
+        
+        # If the item is a parent (has variants), validate only if there's a real change
+        if self.has_variants:
+            # Get previous value from database
+            previous_value = frappe.db.get_value("Item", self.name, "variant_based_on")
+            
+            # If current value is different from previous and there are existing variants
+            if self.variant_based_on != previous_value:
+                # Check if there are already existing variants
+                existing_variants = frappe.get_all("Item", 
+                    filters={"variant_of": self.name},
+                    limit=1
+                )
+                
+                if existing_variants:
+                    frappe.throw(_("Variant Based On cannot be changed once variants are created"))
+
 def validate(doc, method):
-    """التحقق من البيانات قبل الحفظ"""
-    # إذا كان هذا الصنف هو variant، تأكد من أن الصنف الأب لديه group_number
+    """Validate data before saving"""
+    # If this item is a variant, ensure the parent item has group_number
     if doc.variant_of:
         parent = frappe.get_doc("Item", doc.variant_of)
         if not parent.get("group_number"):
-            frappe.throw(_("يجب إدخال Group Number للصنف الأب {0} قبل إنشاء الأصناف المشتقة").format(
+            frappe.throw(_("You must enter Group Number for parent item {0} before creating variants").format(
                 doc.variant_of
             ))
     
-    # إذا كان هذا الصنف هو أب (لديه variants) وتحقق من group_number إذا كان مطلوبًا
-    if doc.get("has_variants") and not doc.get("group_number"):
-        # لا نطلب group_number للأب إلا إذا كان سينشئ variants
-        pass
+    # Validate that group_number is an integer if it exists
+    if doc.get("group_number"):
+        try:
+            int(doc.group_number)
+        except (ValueError, TypeError):
+            frappe.throw(_("Group Number must be an integer"))
 
 def before_insert(doc, method):
-    """قبل إدخال صنف جديد"""
-    # إذا كان هذا الصنف هو variant، قم بتوليد saturn_code
+    """Before inserting a new item"""
+    # If this item is a variant, generate saturn_code
     if doc.variant_of:
         saturn_code = generate_saturn_code_for_variant(doc.variant_of, doc.name)
         if saturn_code:
             doc.saturn_code = saturn_code
 
+def after_insert(doc, method):
+    """After inserting a new item"""
+    if doc.variant_of and not doc.saturn_code:
+        try:
+            saturn_code = generate_saturn_code_for_variant(doc.variant_of, doc.name)
+            if saturn_code:
+                frappe.db.set_value("Item", doc.name, "saturn_code", saturn_code)
+                frappe.db.commit()
+        except Exception as e:
+            frappe.log_error(f"Failed to create saturn_code for item {doc.name}: {str(e)}")
+
 def generate_saturn_code_for_variant(template, variant_name=None):
-    """إنشاء saturn_code للصنف المشتق"""
+    """Generate saturn_code for variant item"""
     parent_item = frappe.get_doc("Item", template)
     
     if not parent_item.get("group_number"):
-        frappe.throw(_("يجب إدخال Group Number للصنف الأب '{0}'").format(template))
+        frappe.throw(_("You must enter Group Number for parent item '{0}'").format(template))
     
     group_number = str(parent_item.group_number)
     abbreviation = generate_abbreviation(parent_item.item_name)
@@ -40,7 +80,7 @@ def generate_saturn_code_for_variant(template, variant_name=None):
     
     saturn_code = f"{group_number}{abbreviation}-{str(new_sequence).zfill(3)}"
     
-    # التأكد من أن الكود فريد
+    # Ensure the code is unique
     counter = 1
     while frappe.db.exists("Item", {"saturn_code": saturn_code}):
         if variant_name and frappe.db.get_value("Item", variant_name, "saturn_code") == saturn_code:
@@ -51,12 +91,12 @@ def generate_saturn_code_for_variant(template, variant_name=None):
         counter += 1
         
         if counter > 1000:
-            frappe.throw(_("تعذر إنشاء Saturn Code فريد"))
+            frappe.throw(_("Failed to create unique Saturn Code"))
     
     return saturn_code
 
 def generate_abbreviation(item_name):
-    """إنشاء اختصار من اسم الصنف"""
+    """Generate abbreviation from item name"""
     if not item_name:
         return "XXX"
     
@@ -78,7 +118,7 @@ def generate_abbreviation(item_name):
         return first_char + last_char
 
 def get_last_sequence(group_number, abbreviation, template):
-    """الحصول على آخر تسلسل مستخدم"""
+    """Get the last used sequence number"""
     pattern = f"{group_number}{abbreviation}-%"
     
     variants = frappe.get_all("Item",
