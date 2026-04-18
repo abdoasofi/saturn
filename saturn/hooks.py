@@ -183,23 +183,28 @@ doc_events = {
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"saturn.tasks.all"
-# 	],
-# 	"daily": [
-# 		"saturn.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"saturn.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"saturn.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"saturn.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+    # "cron": {
+    #     "0 2 * * *": [
+    #         "saturn.utils.inventory_engine.execute_daily_reorder_update"
+    #     ]
+    # }
+	# "all": [
+	# 	"saturn.tasks.all"
+	# ],
+    "daily": [
+        "saturn.utils.inventory_engine.execute_daily_reorder_update"
+    ],
+	# "hourly": [
+	# 	"saturn.tasks.hourly"
+	# ],
+	# "weekly": [
+	# 	"saturn.tasks.weekly"
+	# ],
+	# "monthly": [
+	# 	"saturn.tasks.monthly"
+	# ],
+}
 
 # Testing
 # -------
@@ -322,7 +327,16 @@ fixtures = [
     {
         "doctype": "Custom Field",
         "filters": [
-            ["dt", "=", "User"]
+            ["name", "in", [
+                # User
+                "sales_order_naming_series",
+                
+                # Item
+                "is_smart_reorder",
+                "custom_coverage_months",
+                "custom_saturn_settings_for_stock"
+            ]
+            ]
         ]
     }
     
