@@ -326,18 +326,7 @@ fixtures = [
     },
     {
         "doctype": "Custom Field",
-        "filters": [
-            ["name", "in", [
-                # User
-                "sales_order_naming_series",
-                
-                # Item
-                "is_smart_reorder",
-                "custom_coverage_months",
-                "custom_saturn_settings_for_stock"
-            ]
-            ]
-        ]
-    }
+        "filters": [["module", "=","saturn"] ]
+    },
     
     ]
