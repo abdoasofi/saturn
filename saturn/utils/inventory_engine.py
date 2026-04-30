@@ -18,7 +18,8 @@ def execute_daily_reorder_update():
     # 2. جلب الأصناف (المخزنية وغير المعطلة)
     items = frappe.get_all("Item", 
                            filters={
-                               "is_stock_item": 1, 
+                               "is_stock_item": 1,
+                               "is_smart_reorder": 1,
                                "disabled": 0
                            }, 
                            fields=["name", "custom_reorder_profile"])
