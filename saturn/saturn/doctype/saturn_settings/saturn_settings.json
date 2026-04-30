@@ -5,14 +5,11 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "saturn_reorder_settings_section",
   "enabled",
-  "analysis_period",
-  "coverage_months",
-  "column_break_wjnv",
-  "safety_stock_percent",
-  "default_warehouse",
-  "section_break_clab",
-  "update_reorder_btn"
+  "default_reorder_profile",
+  "update_reorder_btn",
+  "column_break_wjnv"
  ],
  "fields": [
   {
@@ -22,48 +19,31 @@
    "label": "Enabled"
   },
   {
-   "default": "90",
-   "fieldname": "analysis_period",
-   "fieldtype": "Int",
-   "label": "Analysis Period"
-  },
-  {
-   "default": "3.0",
-   "fieldname": "coverage_months",
-   "fieldtype": "Float",
-   "label": "Coverage Months"
-  },
-  {
-   "default": "10.0",
-   "fieldname": "safety_stock_percent",
-   "fieldtype": "Percent",
-   "label": "Safety Stock Percent"
-  },
-  {
-   "fieldname": "default_warehouse",
-   "fieldtype": "Link",
-   "label": "Default Warehouse",
-   "options": "Warehouse"
-  },
-  {
    "fieldname": "column_break_wjnv",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "section_break_clab",
-   "fieldtype": "Section Break"
   },
   {
    "fieldname": "update_reorder_btn",
    "fieldtype": "Button",
    "label": "Update Reorder Levels Now"
+  },
+  {
+   "fieldname": "saturn_reorder_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Saturn Reorder Settings"
+  },
+  {
+   "fieldname": "default_reorder_profile",
+   "fieldtype": "Link",
+   "label": "Saturn Reorder Profile",
+   "options": "Saturn Reorder Profile"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-04-19 02:27:29.252238",
+ "modified": "2026-04-30 23:22:30.075055",
  "modified_by": "Administrator",
  "module": "saturn",
  "name": "Saturn Settings",
